@@ -1,0 +1,2224 @@
+type Query {
+  User(id: String!, draft: Boolean, locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): User
+  Users(where: User_where, draft: Boolean, locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType, page: Int, limit: Int, sort: String): Users
+  docAccessUser(id: String!): usersDocAccess
+  meUser: usersMe
+  initializedUser: Boolean
+  Stock(id: String!, draft: Boolean, locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): Stock
+  Stocks(where: Stock_where, draft: Boolean, locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType, page: Int, limit: Int, sort: String): Stocks
+  docAccessStock(id: String!): stocksDocAccess
+  Preference(key: String): Preference
+  Access: Access
+}
+
+type User {
+  id: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  firstName: String!
+  lastName: String
+  role: User_role!
+  userDetails: User_UserDetails
+  email: String
+  resetPasswordToken: String
+  resetPasswordExpiration: DateTime
+  loginAttempts: Float
+  lockUntil: DateTime
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+enum User_role {
+  admin
+  user
+}
+
+type User_UserDetails {
+  accountId: String
+  balance: Float
+  stocks: [User_UserDetails_Stocks!]
+  transactions: [User_UserDetails_Transactions!]
+}
+
+type User_UserDetails_Stocks {
+  amount: Float
+  stockId(locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): Stock
+  id: String
+}
+
+type Stock {
+  id: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  marketValue: Float
+  symbol: String!
+  historicPrices: [Stock_HistoricPrices!]
+}
+
+type Stock_HistoricPrices {
+  date: DateTime
+  price: Float
+  id: String
+}
+
+enum LocaleInputType {
+  he
+  en
+}
+
+enum FallbackLocaleInputType {
+  he
+  en
+  none
+}
+
+type User_UserDetails_Transactions {
+  type: User_UserDetails_Transactions_type
+  sum: Float
+  date: DateTime
+  stock: User_UserDetails_Transactions_Stock
+  id: String
+}
+
+enum User_UserDetails_Transactions_type {
+  buy
+  sell
+  deposit
+  withdraw
+}
+
+type User_UserDetails_Transactions_Stock {
+  stockId(locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): Stock
+  amount: Float
+  price: Float
+}
+
+type Users {
+  docs: [User]
+  totalDocs: Int
+  offset: Int
+  limit: Int
+  totalPages: Int
+  page: Int
+  pagingCounter: Int
+  hasPrevPage: Boolean
+  hasNextPage: Boolean
+  prevPage: Int
+  nextPage: Int
+}
+
+input User_where {
+  firstName: User_firstName_operator
+  lastName: User_lastName_operator
+  role: User_role_operator
+  userDetails__accountId: User_userDetails__accountId_operator
+  userDetails__balance: User_userDetails__balance_operator
+  userDetails__stocks__amount: User_userDetails__stocks__amount_operator
+  userDetails__stocks__stockId: User_userDetails__stocks__stockId_operator
+  userDetails__stocks__id: User_userDetails__stocks__id_operator
+  userDetails__transactions__type: User_userDetails__transactions__type_operator
+  userDetails__transactions__sum: User_userDetails__transactions__sum_operator
+  userDetails__transactions__date: User_userDetails__transactions__date_operator
+  userDetails__transactions__stock__stockId: User_userDetails__transactions__stock__stockId_operator
+  userDetails__transactions__stock__amount: User_userDetails__transactions__stock__amount_operator
+  userDetails__transactions__stock__price: User_userDetails__transactions__stock__price_operator
+  userDetails__transactions__id: User_userDetails__transactions__id_operator
+  email: User_email_operator
+  id: User_id_operator
+  createdAt: User_createdAt_operator
+  updatedAt: User_updatedAt_operator
+  OR: [User_where_or]
+  AND: [User_where_and]
+}
+
+input User_firstName_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input User_lastName_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_role_operator {
+  equals: User_role_Input
+  not_equals: User_role_Input
+  in: [User_role_Input]
+  not_in: [User_role_Input]
+  all: [User_role_Input]
+}
+
+enum User_role_Input {
+  admin
+  user
+}
+
+input User_userDetails__accountId_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input User_userDetails__balance_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input User_userDetails__stocks__amount_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+}
+
+input User_userDetails__stocks__stockId_operator {
+  equals: String
+  not_equals: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input User_userDetails__stocks__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_userDetails__transactions__type_operator {
+  equals: User_userDetails__transactions__type_Input
+  not_equals: User_userDetails__transactions__type_Input
+  in: [User_userDetails__transactions__type_Input]
+  not_in: [User_userDetails__transactions__type_Input]
+  all: [User_userDetails__transactions__type_Input]
+}
+
+enum User_userDetails__transactions__type_Input {
+  buy
+  sell
+  deposit
+  withdraw
+}
+
+input User_userDetails__transactions__sum_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input User_userDetails__transactions__date_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input User_userDetails__transactions__stock__stockId_operator {
+  equals: String
+  not_equals: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_userDetails__transactions__stock__amount_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input User_userDetails__transactions__stock__price_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input User_userDetails__transactions__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_email_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_id_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+input User_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input User_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input User_where_or {
+  firstName: User_firstName_operator
+  lastName: User_lastName_operator
+  role: User_role_operator
+  userDetails__accountId: User_userDetails__accountId_operator
+  userDetails__balance: User_userDetails__balance_operator
+  userDetails__stocks__amount: User_userDetails__stocks__amount_operator
+  userDetails__stocks__stockId: User_userDetails__stocks__stockId_operator
+  userDetails__stocks__id: User_userDetails__stocks__id_operator
+  userDetails__transactions__type: User_userDetails__transactions__type_operator
+  userDetails__transactions__sum: User_userDetails__transactions__sum_operator
+  userDetails__transactions__date: User_userDetails__transactions__date_operator
+  userDetails__transactions__stock__stockId: User_userDetails__transactions__stock__stockId_operator
+  userDetails__transactions__stock__amount: User_userDetails__transactions__stock__amount_operator
+  userDetails__transactions__stock__price: User_userDetails__transactions__stock__price_operator
+  userDetails__transactions__id: User_userDetails__transactions__id_operator
+  email: User_email_operator
+  id: User_id_operator
+  createdAt: User_createdAt_operator
+  updatedAt: User_updatedAt_operator
+}
+
+input User_where_and {
+  firstName: User_firstName_operator
+  lastName: User_lastName_operator
+  role: User_role_operator
+  userDetails__accountId: User_userDetails__accountId_operator
+  userDetails__balance: User_userDetails__balance_operator
+  userDetails__stocks__amount: User_userDetails__stocks__amount_operator
+  userDetails__stocks__stockId: User_userDetails__stocks__stockId_operator
+  userDetails__stocks__id: User_userDetails__stocks__id_operator
+  userDetails__transactions__type: User_userDetails__transactions__type_operator
+  userDetails__transactions__sum: User_userDetails__transactions__sum_operator
+  userDetails__transactions__date: User_userDetails__transactions__date_operator
+  userDetails__transactions__stock__stockId: User_userDetails__transactions__stock__stockId_operator
+  userDetails__transactions__stock__amount: User_userDetails__transactions__stock__amount_operator
+  userDetails__transactions__stock__price: User_userDetails__transactions__stock__price_operator
+  userDetails__transactions__id: User_userDetails__transactions__id_operator
+  email: User_email_operator
+  id: User_id_operator
+  createdAt: User_createdAt_operator
+  updatedAt: User_updatedAt_operator
+}
+
+type usersDocAccess {
+  fields: UsersDocAccessFields
+  create: UsersCreateDocAccess
+  read: UsersReadDocAccess
+  update: UsersUpdateDocAccess
+  delete: UsersDeleteDocAccess
+  unlock: UsersUnlockDocAccess
+}
+
+type UsersDocAccessFields {
+  firstName: UsersDocAccessFields_firstName
+  lastName: UsersDocAccessFields_lastName
+  role: UsersDocAccessFields_role
+  userDetails: UsersDocAccessFields_userDetails
+  email: UsersDocAccessFields_email
+  password: UsersDocAccessFields_password
+}
+
+type UsersDocAccessFields_firstName {
+  create: UsersDocAccessFields_firstName_Create
+  read: UsersDocAccessFields_firstName_Read
+  update: UsersDocAccessFields_firstName_Update
+  delete: UsersDocAccessFields_firstName_Delete
+}
+
+type UsersDocAccessFields_firstName_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_firstName_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_firstName_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_firstName_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_lastName {
+  create: UsersDocAccessFields_lastName_Create
+  read: UsersDocAccessFields_lastName_Read
+  update: UsersDocAccessFields_lastName_Update
+  delete: UsersDocAccessFields_lastName_Delete
+}
+
+type UsersDocAccessFields_lastName_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_lastName_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_lastName_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_lastName_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_role {
+  create: UsersDocAccessFields_role_Create
+  read: UsersDocAccessFields_role_Read
+  update: UsersDocAccessFields_role_Update
+  delete: UsersDocAccessFields_role_Delete
+}
+
+type UsersDocAccessFields_role_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_role_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_role_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_role_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails {
+  create: UsersDocAccessFields_userDetails_Create
+  read: UsersDocAccessFields_userDetails_Read
+  update: UsersDocAccessFields_userDetails_Update
+  delete: UsersDocAccessFields_userDetails_Delete
+  fields: UsersDocAccessFields_userDetails_Fields
+}
+
+type UsersDocAccessFields_userDetails_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_Fields {
+  accountId: UsersDocAccessFields_userDetails_accountId
+  balance: UsersDocAccessFields_userDetails_balance
+  stocks: UsersDocAccessFields_userDetails_stocks
+  transactions: UsersDocAccessFields_userDetails_transactions
+}
+
+type UsersDocAccessFields_userDetails_accountId {
+  create: UsersDocAccessFields_userDetails_accountId_Create
+  read: UsersDocAccessFields_userDetails_accountId_Read
+  update: UsersDocAccessFields_userDetails_accountId_Update
+  delete: UsersDocAccessFields_userDetails_accountId_Delete
+}
+
+type UsersDocAccessFields_userDetails_accountId_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_accountId_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_accountId_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_accountId_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_balance {
+  create: UsersDocAccessFields_userDetails_balance_Create
+  read: UsersDocAccessFields_userDetails_balance_Read
+  update: UsersDocAccessFields_userDetails_balance_Update
+  delete: UsersDocAccessFields_userDetails_balance_Delete
+}
+
+type UsersDocAccessFields_userDetails_balance_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_balance_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_balance_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_balance_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks {
+  create: UsersDocAccessFields_userDetails_stocks_Create
+  read: UsersDocAccessFields_userDetails_stocks_Read
+  update: UsersDocAccessFields_userDetails_stocks_Update
+  delete: UsersDocAccessFields_userDetails_stocks_Delete
+  fields: UsersDocAccessFields_userDetails_stocks_Fields
+}
+
+type UsersDocAccessFields_userDetails_stocks_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_Fields {
+  amount: UsersDocAccessFields_userDetails_stocks_amount
+  stockId: UsersDocAccessFields_userDetails_stocks_stockId
+  id: UsersDocAccessFields_userDetails_stocks_id
+}
+
+type UsersDocAccessFields_userDetails_stocks_amount {
+  create: UsersDocAccessFields_userDetails_stocks_amount_Create
+  read: UsersDocAccessFields_userDetails_stocks_amount_Read
+  update: UsersDocAccessFields_userDetails_stocks_amount_Update
+  delete: UsersDocAccessFields_userDetails_stocks_amount_Delete
+}
+
+type UsersDocAccessFields_userDetails_stocks_amount_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_amount_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_amount_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_amount_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_stockId {
+  create: UsersDocAccessFields_userDetails_stocks_stockId_Create
+  read: UsersDocAccessFields_userDetails_stocks_stockId_Read
+  update: UsersDocAccessFields_userDetails_stocks_stockId_Update
+  delete: UsersDocAccessFields_userDetails_stocks_stockId_Delete
+}
+
+type UsersDocAccessFields_userDetails_stocks_stockId_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_stockId_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_stockId_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_stockId_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_id {
+  create: UsersDocAccessFields_userDetails_stocks_id_Create
+  read: UsersDocAccessFields_userDetails_stocks_id_Read
+  update: UsersDocAccessFields_userDetails_stocks_id_Update
+  delete: UsersDocAccessFields_userDetails_stocks_id_Delete
+}
+
+type UsersDocAccessFields_userDetails_stocks_id_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_id_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_id_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_stocks_id_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions {
+  create: UsersDocAccessFields_userDetails_transactions_Create
+  read: UsersDocAccessFields_userDetails_transactions_Read
+  update: UsersDocAccessFields_userDetails_transactions_Update
+  delete: UsersDocAccessFields_userDetails_transactions_Delete
+  fields: UsersDocAccessFields_userDetails_transactions_Fields
+}
+
+type UsersDocAccessFields_userDetails_transactions_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_Fields {
+  type: UsersDocAccessFields_userDetails_transactions_type
+  sum: UsersDocAccessFields_userDetails_transactions_sum
+  date: UsersDocAccessFields_userDetails_transactions_date
+  stock: UsersDocAccessFields_userDetails_transactions_stock
+  id: UsersDocAccessFields_userDetails_transactions_id
+}
+
+type UsersDocAccessFields_userDetails_transactions_type {
+  create: UsersDocAccessFields_userDetails_transactions_type_Create
+  read: UsersDocAccessFields_userDetails_transactions_type_Read
+  update: UsersDocAccessFields_userDetails_transactions_type_Update
+  delete: UsersDocAccessFields_userDetails_transactions_type_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_type_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_type_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_type_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_type_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_sum {
+  create: UsersDocAccessFields_userDetails_transactions_sum_Create
+  read: UsersDocAccessFields_userDetails_transactions_sum_Read
+  update: UsersDocAccessFields_userDetails_transactions_sum_Update
+  delete: UsersDocAccessFields_userDetails_transactions_sum_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_sum_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_sum_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_sum_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_sum_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_date {
+  create: UsersDocAccessFields_userDetails_transactions_date_Create
+  read: UsersDocAccessFields_userDetails_transactions_date_Read
+  update: UsersDocAccessFields_userDetails_transactions_date_Update
+  delete: UsersDocAccessFields_userDetails_transactions_date_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_date_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_date_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_date_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_date_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock {
+  create: UsersDocAccessFields_userDetails_transactions_stock_Create
+  read: UsersDocAccessFields_userDetails_transactions_stock_Read
+  update: UsersDocAccessFields_userDetails_transactions_stock_Update
+  delete: UsersDocAccessFields_userDetails_transactions_stock_Delete
+  fields: UsersDocAccessFields_userDetails_transactions_stock_Fields
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Fields {
+  stockId: UsersDocAccessFields_userDetails_transactions_stock_stockId
+  amount: UsersDocAccessFields_userDetails_transactions_stock_amount
+  price: UsersDocAccessFields_userDetails_transactions_stock_price
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId {
+  create: UsersDocAccessFields_userDetails_transactions_stock_stockId_Create
+  read: UsersDocAccessFields_userDetails_transactions_stock_stockId_Read
+  update: UsersDocAccessFields_userDetails_transactions_stock_stockId_Update
+  delete: UsersDocAccessFields_userDetails_transactions_stock_stockId_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount {
+  create: UsersDocAccessFields_userDetails_transactions_stock_amount_Create
+  read: UsersDocAccessFields_userDetails_transactions_stock_amount_Read
+  update: UsersDocAccessFields_userDetails_transactions_stock_amount_Update
+  delete: UsersDocAccessFields_userDetails_transactions_stock_amount_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price {
+  create: UsersDocAccessFields_userDetails_transactions_stock_price_Create
+  read: UsersDocAccessFields_userDetails_transactions_stock_price_Read
+  update: UsersDocAccessFields_userDetails_transactions_stock_price_Update
+  delete: UsersDocAccessFields_userDetails_transactions_stock_price_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_id {
+  create: UsersDocAccessFields_userDetails_transactions_id_Create
+  read: UsersDocAccessFields_userDetails_transactions_id_Read
+  update: UsersDocAccessFields_userDetails_transactions_id_Update
+  delete: UsersDocAccessFields_userDetails_transactions_id_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_id_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_id_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_id_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_id_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email {
+  create: UsersDocAccessFields_email_Create
+  read: UsersDocAccessFields_email_Read
+  update: UsersDocAccessFields_email_Update
+  delete: UsersDocAccessFields_email_Delete
+}
+
+type UsersDocAccessFields_email_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password {
+  create: UsersDocAccessFields_password_Create
+  read: UsersDocAccessFields_password_Read
+  update: UsersDocAccessFields_password_Update
+  delete: UsersDocAccessFields_password_Delete
+}
+
+type UsersDocAccessFields_password_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password_Delete {
+  permission: Boolean!
+}
+
+type UsersCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
+type UsersReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUnlockDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type usersMe {
+  token: String
+  user: User
+  exp: Int
+  collection: String
+}
+
+type Stocks {
+  docs: [Stock]
+  totalDocs: Int
+  offset: Int
+  limit: Int
+  totalPages: Int
+  page: Int
+  pagingCounter: Int
+  hasPrevPage: Boolean
+  hasNextPage: Boolean
+  prevPage: Int
+  nextPage: Int
+}
+
+input Stock_where {
+  name: Stock_name_operator
+  marketValue: Stock_marketValue_operator
+  symbol: Stock_symbol_operator
+  historicPrices__date: Stock_historicPrices__date_operator
+  historicPrices__price: Stock_historicPrices__price_operator
+  historicPrices__id: Stock_historicPrices__id_operator
+  id: Stock_id_operator
+  createdAt: Stock_createdAt_operator
+  updatedAt: Stock_updatedAt_operator
+  OR: [Stock_where_or]
+  AND: [Stock_where_and]
+}
+
+input Stock_name_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Stock_marketValue_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Stock_symbol_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Stock_historicPrices__date_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input Stock_historicPrices__price_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+}
+
+input Stock_historicPrices__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Stock_id_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input Stock_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Stock_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Stock_where_or {
+  name: Stock_name_operator
+  marketValue: Stock_marketValue_operator
+  symbol: Stock_symbol_operator
+  historicPrices__date: Stock_historicPrices__date_operator
+  historicPrices__price: Stock_historicPrices__price_operator
+  historicPrices__id: Stock_historicPrices__id_operator
+  id: Stock_id_operator
+  createdAt: Stock_createdAt_operator
+  updatedAt: Stock_updatedAt_operator
+}
+
+input Stock_where_and {
+  name: Stock_name_operator
+  marketValue: Stock_marketValue_operator
+  symbol: Stock_symbol_operator
+  historicPrices__date: Stock_historicPrices__date_operator
+  historicPrices__price: Stock_historicPrices__price_operator
+  historicPrices__id: Stock_historicPrices__id_operator
+  id: Stock_id_operator
+  createdAt: Stock_createdAt_operator
+  updatedAt: Stock_updatedAt_operator
+}
+
+type stocksDocAccess {
+  fields: StocksDocAccessFields
+  create: StocksCreateDocAccess
+  read: StocksReadDocAccess
+  update: StocksUpdateDocAccess
+  delete: StocksDeleteDocAccess
+}
+
+type StocksDocAccessFields {
+  name: StocksDocAccessFields_name
+  marketValue: StocksDocAccessFields_marketValue
+  symbol: StocksDocAccessFields_symbol
+  historicPrices: StocksDocAccessFields_historicPrices
+}
+
+type StocksDocAccessFields_name {
+  create: StocksDocAccessFields_name_Create
+  read: StocksDocAccessFields_name_Read
+  update: StocksDocAccessFields_name_Update
+  delete: StocksDocAccessFields_name_Delete
+}
+
+type StocksDocAccessFields_name_Create {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_name_Read {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_name_Update {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_name_Delete {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_marketValue {
+  create: StocksDocAccessFields_marketValue_Create
+  read: StocksDocAccessFields_marketValue_Read
+  update: StocksDocAccessFields_marketValue_Update
+  delete: StocksDocAccessFields_marketValue_Delete
+}
+
+type StocksDocAccessFields_marketValue_Create {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_marketValue_Read {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_marketValue_Update {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_marketValue_Delete {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_symbol {
+  create: StocksDocAccessFields_symbol_Create
+  read: StocksDocAccessFields_symbol_Read
+  update: StocksDocAccessFields_symbol_Update
+  delete: StocksDocAccessFields_symbol_Delete
+}
+
+type StocksDocAccessFields_symbol_Create {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_symbol_Read {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_symbol_Update {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_symbol_Delete {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices {
+  create: StocksDocAccessFields_historicPrices_Create
+  read: StocksDocAccessFields_historicPrices_Read
+  update: StocksDocAccessFields_historicPrices_Update
+  delete: StocksDocAccessFields_historicPrices_Delete
+  fields: StocksDocAccessFields_historicPrices_Fields
+}
+
+type StocksDocAccessFields_historicPrices_Create {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_Read {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_Update {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_Delete {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_Fields {
+  date: StocksDocAccessFields_historicPrices_date
+  price: StocksDocAccessFields_historicPrices_price
+  id: StocksDocAccessFields_historicPrices_id
+}
+
+type StocksDocAccessFields_historicPrices_date {
+  create: StocksDocAccessFields_historicPrices_date_Create
+  read: StocksDocAccessFields_historicPrices_date_Read
+  update: StocksDocAccessFields_historicPrices_date_Update
+  delete: StocksDocAccessFields_historicPrices_date_Delete
+}
+
+type StocksDocAccessFields_historicPrices_date_Create {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_date_Read {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_date_Update {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_date_Delete {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_price {
+  create: StocksDocAccessFields_historicPrices_price_Create
+  read: StocksDocAccessFields_historicPrices_price_Read
+  update: StocksDocAccessFields_historicPrices_price_Update
+  delete: StocksDocAccessFields_historicPrices_price_Delete
+}
+
+type StocksDocAccessFields_historicPrices_price_Create {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_price_Read {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_price_Update {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_price_Delete {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_id {
+  create: StocksDocAccessFields_historicPrices_id_Create
+  read: StocksDocAccessFields_historicPrices_id_Read
+  update: StocksDocAccessFields_historicPrices_id_Update
+  delete: StocksDocAccessFields_historicPrices_id_Delete
+}
+
+type StocksDocAccessFields_historicPrices_id_Create {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_id_Read {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_id_Update {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_historicPrices_id_Delete {
+  permission: Boolean!
+}
+
+type StocksCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type StocksReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type StocksUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type StocksDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type Preference {
+  key: String!
+  value: JSON
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Access {
+  canAccessAdmin: Boolean!
+  users: usersAccess
+  stocks: stocksAccess
+}
+
+type usersAccess {
+  fields: UsersFields
+  create: UsersCreateAccess
+  read: UsersReadAccess
+  update: UsersUpdateAccess
+  delete: UsersDeleteAccess
+  unlock: UsersUnlockAccess
+}
+
+type UsersFields {
+  firstName: UsersFields_firstName
+  lastName: UsersFields_lastName
+  role: UsersFields_role
+  userDetails: UsersFields_userDetails
+  email: UsersFields_email
+  password: UsersFields_password
+}
+
+type UsersFields_firstName {
+  create: UsersFields_firstName_Create
+  read: UsersFields_firstName_Read
+  update: UsersFields_firstName_Update
+  delete: UsersFields_firstName_Delete
+}
+
+type UsersFields_firstName_Create {
+  permission: Boolean!
+}
+
+type UsersFields_firstName_Read {
+  permission: Boolean!
+}
+
+type UsersFields_firstName_Update {
+  permission: Boolean!
+}
+
+type UsersFields_firstName_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_lastName {
+  create: UsersFields_lastName_Create
+  read: UsersFields_lastName_Read
+  update: UsersFields_lastName_Update
+  delete: UsersFields_lastName_Delete
+}
+
+type UsersFields_lastName_Create {
+  permission: Boolean!
+}
+
+type UsersFields_lastName_Read {
+  permission: Boolean!
+}
+
+type UsersFields_lastName_Update {
+  permission: Boolean!
+}
+
+type UsersFields_lastName_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_role {
+  create: UsersFields_role_Create
+  read: UsersFields_role_Read
+  update: UsersFields_role_Update
+  delete: UsersFields_role_Delete
+}
+
+type UsersFields_role_Create {
+  permission: Boolean!
+}
+
+type UsersFields_role_Read {
+  permission: Boolean!
+}
+
+type UsersFields_role_Update {
+  permission: Boolean!
+}
+
+type UsersFields_role_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails {
+  create: UsersFields_userDetails_Create
+  read: UsersFields_userDetails_Read
+  update: UsersFields_userDetails_Update
+  delete: UsersFields_userDetails_Delete
+  fields: UsersFields_userDetails_Fields
+}
+
+type UsersFields_userDetails_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_Fields {
+  accountId: UsersFields_userDetails_accountId
+  balance: UsersFields_userDetails_balance
+  stocks: UsersFields_userDetails_stocks
+  transactions: UsersFields_userDetails_transactions
+}
+
+type UsersFields_userDetails_accountId {
+  create: UsersFields_userDetails_accountId_Create
+  read: UsersFields_userDetails_accountId_Read
+  update: UsersFields_userDetails_accountId_Update
+  delete: UsersFields_userDetails_accountId_Delete
+}
+
+type UsersFields_userDetails_accountId_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_accountId_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_accountId_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_accountId_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_balance {
+  create: UsersFields_userDetails_balance_Create
+  read: UsersFields_userDetails_balance_Read
+  update: UsersFields_userDetails_balance_Update
+  delete: UsersFields_userDetails_balance_Delete
+}
+
+type UsersFields_userDetails_balance_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_balance_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_balance_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_balance_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks {
+  create: UsersFields_userDetails_stocks_Create
+  read: UsersFields_userDetails_stocks_Read
+  update: UsersFields_userDetails_stocks_Update
+  delete: UsersFields_userDetails_stocks_Delete
+  fields: UsersFields_userDetails_stocks_Fields
+}
+
+type UsersFields_userDetails_stocks_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_Fields {
+  amount: UsersFields_userDetails_stocks_amount
+  stockId: UsersFields_userDetails_stocks_stockId
+  id: UsersFields_userDetails_stocks_id
+}
+
+type UsersFields_userDetails_stocks_amount {
+  create: UsersFields_userDetails_stocks_amount_Create
+  read: UsersFields_userDetails_stocks_amount_Read
+  update: UsersFields_userDetails_stocks_amount_Update
+  delete: UsersFields_userDetails_stocks_amount_Delete
+}
+
+type UsersFields_userDetails_stocks_amount_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_amount_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_amount_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_amount_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_stockId {
+  create: UsersFields_userDetails_stocks_stockId_Create
+  read: UsersFields_userDetails_stocks_stockId_Read
+  update: UsersFields_userDetails_stocks_stockId_Update
+  delete: UsersFields_userDetails_stocks_stockId_Delete
+}
+
+type UsersFields_userDetails_stocks_stockId_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_stockId_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_stockId_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_stockId_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_id {
+  create: UsersFields_userDetails_stocks_id_Create
+  read: UsersFields_userDetails_stocks_id_Read
+  update: UsersFields_userDetails_stocks_id_Update
+  delete: UsersFields_userDetails_stocks_id_Delete
+}
+
+type UsersFields_userDetails_stocks_id_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_id_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_id_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_stocks_id_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions {
+  create: UsersFields_userDetails_transactions_Create
+  read: UsersFields_userDetails_transactions_Read
+  update: UsersFields_userDetails_transactions_Update
+  delete: UsersFields_userDetails_transactions_Delete
+  fields: UsersFields_userDetails_transactions_Fields
+}
+
+type UsersFields_userDetails_transactions_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_Fields {
+  type: UsersFields_userDetails_transactions_type
+  sum: UsersFields_userDetails_transactions_sum
+  date: UsersFields_userDetails_transactions_date
+  stock: UsersFields_userDetails_transactions_stock
+  id: UsersFields_userDetails_transactions_id
+}
+
+type UsersFields_userDetails_transactions_type {
+  create: UsersFields_userDetails_transactions_type_Create
+  read: UsersFields_userDetails_transactions_type_Read
+  update: UsersFields_userDetails_transactions_type_Update
+  delete: UsersFields_userDetails_transactions_type_Delete
+}
+
+type UsersFields_userDetails_transactions_type_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_type_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_type_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_type_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_sum {
+  create: UsersFields_userDetails_transactions_sum_Create
+  read: UsersFields_userDetails_transactions_sum_Read
+  update: UsersFields_userDetails_transactions_sum_Update
+  delete: UsersFields_userDetails_transactions_sum_Delete
+}
+
+type UsersFields_userDetails_transactions_sum_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_sum_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_sum_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_sum_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_date {
+  create: UsersFields_userDetails_transactions_date_Create
+  read: UsersFields_userDetails_transactions_date_Read
+  update: UsersFields_userDetails_transactions_date_Update
+  delete: UsersFields_userDetails_transactions_date_Delete
+}
+
+type UsersFields_userDetails_transactions_date_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_date_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_date_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_date_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock {
+  create: UsersFields_userDetails_transactions_stock_Create
+  read: UsersFields_userDetails_transactions_stock_Read
+  update: UsersFields_userDetails_transactions_stock_Update
+  delete: UsersFields_userDetails_transactions_stock_Delete
+  fields: UsersFields_userDetails_transactions_stock_Fields
+}
+
+type UsersFields_userDetails_transactions_stock_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_Fields {
+  stockId: UsersFields_userDetails_transactions_stock_stockId
+  amount: UsersFields_userDetails_transactions_stock_amount
+  price: UsersFields_userDetails_transactions_stock_price
+}
+
+type UsersFields_userDetails_transactions_stock_stockId {
+  create: UsersFields_userDetails_transactions_stock_stockId_Create
+  read: UsersFields_userDetails_transactions_stock_stockId_Read
+  update: UsersFields_userDetails_transactions_stock_stockId_Update
+  delete: UsersFields_userDetails_transactions_stock_stockId_Delete
+}
+
+type UsersFields_userDetails_transactions_stock_stockId_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_stockId_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_stockId_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_stockId_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_amount {
+  create: UsersFields_userDetails_transactions_stock_amount_Create
+  read: UsersFields_userDetails_transactions_stock_amount_Read
+  update: UsersFields_userDetails_transactions_stock_amount_Update
+  delete: UsersFields_userDetails_transactions_stock_amount_Delete
+}
+
+type UsersFields_userDetails_transactions_stock_amount_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_amount_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_amount_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_amount_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_price {
+  create: UsersFields_userDetails_transactions_stock_price_Create
+  read: UsersFields_userDetails_transactions_stock_price_Read
+  update: UsersFields_userDetails_transactions_stock_price_Update
+  delete: UsersFields_userDetails_transactions_stock_price_Delete
+}
+
+type UsersFields_userDetails_transactions_stock_price_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_price_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_price_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_price_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_id {
+  create: UsersFields_userDetails_transactions_id_Create
+  read: UsersFields_userDetails_transactions_id_Read
+  update: UsersFields_userDetails_transactions_id_Update
+  delete: UsersFields_userDetails_transactions_id_Delete
+}
+
+type UsersFields_userDetails_transactions_id_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_id_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_id_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_id_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_email {
+  create: UsersFields_email_Create
+  read: UsersFields_email_Read
+  update: UsersFields_email_Update
+  delete: UsersFields_email_Delete
+}
+
+type UsersFields_email_Create {
+  permission: Boolean!
+}
+
+type UsersFields_email_Read {
+  permission: Boolean!
+}
+
+type UsersFields_email_Update {
+  permission: Boolean!
+}
+
+type UsersFields_email_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_password {
+  create: UsersFields_password_Create
+  read: UsersFields_password_Read
+  update: UsersFields_password_Update
+  delete: UsersFields_password_Delete
+}
+
+type UsersFields_password_Create {
+  permission: Boolean!
+}
+
+type UsersFields_password_Read {
+  permission: Boolean!
+}
+
+type UsersFields_password_Update {
+  permission: Boolean!
+}
+
+type UsersFields_password_Delete {
+  permission: Boolean!
+}
+
+type UsersCreateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUnlockAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type stocksAccess {
+  fields: StocksFields
+  create: StocksCreateAccess
+  read: StocksReadAccess
+  update: StocksUpdateAccess
+  delete: StocksDeleteAccess
+}
+
+type StocksFields {
+  name: StocksFields_name
+  marketValue: StocksFields_marketValue
+  symbol: StocksFields_symbol
+  historicPrices: StocksFields_historicPrices
+}
+
+type StocksFields_name {
+  create: StocksFields_name_Create
+  read: StocksFields_name_Read
+  update: StocksFields_name_Update
+  delete: StocksFields_name_Delete
+}
+
+type StocksFields_name_Create {
+  permission: Boolean!
+}
+
+type StocksFields_name_Read {
+  permission: Boolean!
+}
+
+type StocksFields_name_Update {
+  permission: Boolean!
+}
+
+type StocksFields_name_Delete {
+  permission: Boolean!
+}
+
+type StocksFields_marketValue {
+  create: StocksFields_marketValue_Create
+  read: StocksFields_marketValue_Read
+  update: StocksFields_marketValue_Update
+  delete: StocksFields_marketValue_Delete
+}
+
+type StocksFields_marketValue_Create {
+  permission: Boolean!
+}
+
+type StocksFields_marketValue_Read {
+  permission: Boolean!
+}
+
+type StocksFields_marketValue_Update {
+  permission: Boolean!
+}
+
+type StocksFields_marketValue_Delete {
+  permission: Boolean!
+}
+
+type StocksFields_symbol {
+  create: StocksFields_symbol_Create
+  read: StocksFields_symbol_Read
+  update: StocksFields_symbol_Update
+  delete: StocksFields_symbol_Delete
+}
+
+type StocksFields_symbol_Create {
+  permission: Boolean!
+}
+
+type StocksFields_symbol_Read {
+  permission: Boolean!
+}
+
+type StocksFields_symbol_Update {
+  permission: Boolean!
+}
+
+type StocksFields_symbol_Delete {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices {
+  create: StocksFields_historicPrices_Create
+  read: StocksFields_historicPrices_Read
+  update: StocksFields_historicPrices_Update
+  delete: StocksFields_historicPrices_Delete
+  fields: StocksFields_historicPrices_Fields
+}
+
+type StocksFields_historicPrices_Create {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_Read {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_Update {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_Delete {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_Fields {
+  date: StocksFields_historicPrices_date
+  price: StocksFields_historicPrices_price
+  id: StocksFields_historicPrices_id
+}
+
+type StocksFields_historicPrices_date {
+  create: StocksFields_historicPrices_date_Create
+  read: StocksFields_historicPrices_date_Read
+  update: StocksFields_historicPrices_date_Update
+  delete: StocksFields_historicPrices_date_Delete
+}
+
+type StocksFields_historicPrices_date_Create {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_date_Read {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_date_Update {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_date_Delete {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_price {
+  create: StocksFields_historicPrices_price_Create
+  read: StocksFields_historicPrices_price_Read
+  update: StocksFields_historicPrices_price_Update
+  delete: StocksFields_historicPrices_price_Delete
+}
+
+type StocksFields_historicPrices_price_Create {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_price_Read {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_price_Update {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_price_Delete {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_id {
+  create: StocksFields_historicPrices_id_Create
+  read: StocksFields_historicPrices_id_Read
+  update: StocksFields_historicPrices_id_Update
+  delete: StocksFields_historicPrices_id_Delete
+}
+
+type StocksFields_historicPrices_id_Create {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_id_Read {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_id_Update {
+  permission: Boolean!
+}
+
+type StocksFields_historicPrices_id_Delete {
+  permission: Boolean!
+}
+
+type StocksCreateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type StocksReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type StocksUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type StocksDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type Mutation {
+  createUser(data: mutationUserInput!, draft: Boolean, locale: LocaleInputType): User
+  updateUser(id: String!, data: mutationUserUpdateInput!, draft: Boolean, autosave: Boolean, locale: LocaleInputType): User
+  deleteUser(id: String!): User
+  refreshTokenUser(token: String): usersRefreshedUser
+  logoutUser: String
+  unlockUser(email: String!): Boolean!
+  loginUser(email: String, password: String): usersLoginResult
+  forgotPasswordUser(email: String!, disableEmail: Boolean, expiration: Int): Boolean!
+  resetPasswordUser(token: String, password: String): usersResetPassword
+  verifyEmailUser(token: String): Boolean
+  createStock(data: mutationStockInput!, draft: Boolean, locale: LocaleInputType): Stock
+  updateStock(id: String!, data: mutationStockUpdateInput!, draft: Boolean, autosave: Boolean, locale: LocaleInputType): Stock
+  deleteStock(id: String!): Stock
+  updatePreference(key: String!, value: JSON): Preference
+  deletePreference(key: String!): Preference
+}
+
+input mutationUserInput {
+  firstName: String!
+  lastName: String
+  role: String!
+  userDetails: mutationUser_UserDetailsInput!
+  email: String
+  resetPasswordToken: String
+  resetPasswordExpiration: String
+  loginAttempts: Float
+  lockUntil: String
+  password: String!
+}
+
+input mutationUser_UserDetailsInput {
+  accountId: String!
+  balance: Float
+  stocks: [mutationUser_UserDetails_StocksInput]
+  transactions: [mutationUser_UserDetails_TransactionsInput]
+}
+
+input mutationUser_UserDetails_StocksInput {
+  amount: Float!
+  stockId: String
+  id: String
+}
+
+input mutationUser_UserDetails_TransactionsInput {
+  type: String!
+  sum: Float
+  date: String!
+  stock: mutationUser_UserDetails_Transactions_StockInput
+  id: String
+}
+
+input mutationUser_UserDetails_Transactions_StockInput {
+  stockId: String
+  amount: Float
+  price: Float
+}
+
+input mutationUserUpdateInput {
+  firstName: String
+  lastName: String
+  role: String
+  userDetails: mutationUserUpdate_UserDetailsInput!
+  email: String
+  resetPasswordToken: String
+  resetPasswordExpiration: String
+  loginAttempts: Float
+  lockUntil: String
+  password: String
+}
+
+input mutationUserUpdate_UserDetailsInput {
+  accountId: String!
+  balance: Float
+  stocks: [mutationUserUpdate_UserDetails_StocksInput]
+  transactions: [mutationUserUpdate_UserDetails_TransactionsInput]
+}
+
+input mutationUserUpdate_UserDetails_StocksInput {
+  amount: Float!
+  stockId: String
+  id: String
+}
+
+input mutationUserUpdate_UserDetails_TransactionsInput {
+  type: String!
+  sum: Float
+  date: String!
+  stock: mutationUserUpdate_UserDetails_Transactions_StockInput
+  id: String
+}
+
+input mutationUserUpdate_UserDetails_Transactions_StockInput {
+  stockId: String
+  amount: Float
+  price: Float
+}
+
+type usersRefreshedUser {
+  user: usersJWT
+  refreshedToken: String
+  exp: Int
+}
+
+type usersJWT {
+  email: EmailAddress!
+  collection: String!
+}
+
+"""
+A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/.
+"""
+scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
+
+type usersLoginResult {
+  token: String
+  user: User
+  exp: Int
+}
+
+type usersResetPassword {
+  token: String
+  user: User
+}
+
+input mutationStockInput {
+  name: String!
+  marketValue: Float
+  symbol: String!
+  historicPrices: [mutationStock_HistoricPricesInput]
+}
+
+input mutationStock_HistoricPricesInput {
+  date: String!
+  price: Float!
+  id: String
+}
+
+input mutationStockUpdateInput {
+  name: String
+  marketValue: Float
+  symbol: String
+  historicPrices: [mutationStockUpdate_HistoricPricesInput]
+}
+
+input mutationStockUpdate_HistoricPricesInput {
+  date: String!
+  price: Float!
+  id: String
+}
