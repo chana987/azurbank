@@ -1,10 +1,10 @@
-import { buildConfig } from 'payload/config';
+import { buildConfig, Config } from 'payload/config';
 import path from 'path';
 import Users from './collections/Users';
 import Stocks from './collections/Stocks';
 
 export default buildConfig({
-  serverURL: 'http://localhost:3000',
+  serverURL: process.env.pa,
   admin: {
     user: Users.slug,
   },
