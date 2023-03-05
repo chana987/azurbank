@@ -4,7 +4,7 @@ import Users from './collections/Users';
 import Stocks from './collections/Stocks';
 
 export default buildConfig({
-  serverURL: process.env.pa,
+  serverURL: process.env.SERVER_URL,
   admin: {
     user: Users.slug,
   },
