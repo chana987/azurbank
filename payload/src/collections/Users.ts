@@ -100,7 +100,7 @@ const Users: CollectionConfig = {
         }
       ],
       admin: {
-        condition: (data, siblingData) => siblingData.roles.includes('kid'),
+        condition: (data, siblingData) => siblingData?.roles?.includes('kid'),
       },
     },
   ],
