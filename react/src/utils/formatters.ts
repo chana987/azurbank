@@ -90,7 +90,6 @@ export const formatUser = (u: any): User => {
 		}, 0) || 0,
 		role: u?.attributes?.role?.data?.attributes?.name,
 		stocks: formatUserStocks(u?.attributes?.stocks),
-		username: u?.attributes?.username,
 	};
 	return user;
 };

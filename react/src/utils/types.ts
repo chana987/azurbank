@@ -128,7 +128,6 @@ export interface User {
   portfolioValue?: number;
   role?: Role;
   stocks: UserStock[];
-  username?: string;
 }
 
 export interface UserStock extends Stock {

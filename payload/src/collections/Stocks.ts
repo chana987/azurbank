@@ -35,6 +35,34 @@ const Stocks: CollectionConfig = {
           unique: true,
         },
         {
+          name: 'ISIN',
+          type: 'text',
+          unique: true,
+        },
+        {
+          name: 'issuerId',
+          type: 'number',
+          unique: true,
+        },
+        {
+          name: 'securityId',
+          type: 'number',
+          unique: true,
+        },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'PE',
+          type: 'number',
+        },
+        {
+          name: 'DPR',
+          type: 'number',
+        },
+        {
           name: 'capital',
           type: 'number',
         },
@@ -83,6 +111,10 @@ const Stocks: CollectionConfig = {
               name: 'date',
               type: 'date',
               required: true,
+            },
+            {
+              name: 'xdate',
+              type: 'date',
             },
             {
               name: 'amount',

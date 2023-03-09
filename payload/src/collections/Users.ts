@@ -73,6 +73,19 @@ const Users: CollectionConfig = {
               name: 'birthday',
               type: 'date',
             },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'portfolioValue',
+              type: 'number',
+              admin:
+              {
+                disabled: true,
+              },
+            },
             {
               name: 'balance',
               type: 'number',
@@ -134,6 +147,24 @@ const Users: CollectionConfig = {
                 },
               ],
               required: true,
+              admin: {
+                layout: 'horizontal',
+              },
+            },
+            {
+              name: 'status',
+              type: 'radio',
+              defaultValue: 'completed',
+              options: [
+                {
+                  label: 'Pending',
+                  value: 'pending',
+                },
+                {
+                  label: 'Completed',
+                  value: 'completed',
+                },
+              ],
               admin: {
                 layout: 'horizontal',
               },
