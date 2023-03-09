@@ -29,6 +29,7 @@ const Users: CollectionConfig = {
     {
       name: 'email',
       type: 'text',
+      saveToJWT: true,
     },
     {
       name: 'roles',
