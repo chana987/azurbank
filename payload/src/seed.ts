@@ -1,5 +1,5 @@
 import { Payload } from 'payload';
-import { User, Stock, Dividend, Transaction } from './payload-types';
+import { User, Stock } from './payload-types';
 
 // seed the database with some data
 export const seed = async (payload: Payload): Promise<void> => {
@@ -35,7 +35,7 @@ export const seed = async (payload: Payload): Promise<void> => {
     data: {
       name: 'Rami Levi',
       hebrewName: 'רמי לוי',
-      marketValue: 2850168000,
+      capital: 2850168000,
       symbol: 'RMLI',
       historicPrices: [
         {
@@ -58,7 +58,7 @@ export const seed = async (payload: Payload): Promise<void> => {
     data: {
       name: 'Emilia Development (O.F.G) LTD.',
       hebrewName: 'אמיליה פיתוח',
-      marketValue: 569673000,
+      capital: 569673000,
       symbol: 'EMDV',
       historicPrices: [
         {
@@ -81,7 +81,7 @@ export const seed = async (payload: Payload): Promise<void> => {
     data: {
       name: 'TEVA - PHARMACEUTICAL INDUSTRIES LTD.',
       hebrewName: 'טבע תעשיות פרמצבטיות בע"מ',
-      marketValue: 37911345000,
+      capital: 37911345000,
       symbol: 'TEVA',
       historicPrices: [
         {
@@ -104,7 +104,7 @@ export const seed = async (payload: Payload): Promise<void> => {
     data: {
       name: 'ADGAR INV.',
       hebrewName: 'אדגר',
-      marketValue: 722892000,
+      capital: 722892000,
       symbol: 'ADGR',
       historicPrices: [
         {
