@@ -17,19 +17,24 @@ const Users: CollectionConfig = {
   },
   fields: [
     {
-      name: 'username',
-      type: 'text',
-      required: true,
-      saveToJWT: true,
-    },
-    {
-      name: 'lastName',
-      type: 'text',
-    },
-    {
       name: 'email',
       type: 'text',
       saveToJWT: true,
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'username',
+          type: 'text',
+          required: true,
+          saveToJWT: true,
+        },
+        {
+          name: 'lastName',
+          type: 'text',
+        },
+      ],
     },
     {
       name: 'roles',
@@ -37,6 +42,9 @@ const Users: CollectionConfig = {
       type: 'select',
       hasMany: true,
       defaultValue: ['kid'],
+      admin: {
+        position: 'sidebar',
+      },
       options: [
         {
           label: 'Admin',
@@ -54,48 +62,118 @@ const Users: CollectionConfig = {
       type: 'group',
       fields: [
         {
-          name: 'accountId',
-          type: 'text',
-          unique: true,
-        },
-        {
-          name: 'birthday',
-          type: 'date',
-        },
-        {
-          name: 'balance',
-          type: 'number',
-          defaultValue: 0,
+          type: 'row',
+          fields: [
+            {
+              name: 'accountId',
+              type: 'text',
+              unique: true,
+            },
+            {
+              name: 'birthday',
+              type: 'date',
+            },
+            {
+              name: 'balance',
+              type: 'number',
+              defaultValue: 0,
+            },
+          ],
         },
         {
           name: 'stocks',
           type: 'array',
           defaultValue: [],
+          admin: {
+            initCollapsed: true,
+          },
           fields: [
             {
-              name: 'amount',
-              type: 'number',
-            },
-            {
-              name: 'stockId',
-              type: 'relationship',
-              relationTo: 'stocks',
+              type: 'row',
+              fields: [
+                {
+                  name: 'stockId',
+                  type: 'relationship',
+                  relationTo: 'stocks',
+                },
+                {
+                  name: 'amount',
+                  type: 'number',
+                },
+              ],
             },
           ],
         },
         {
-          name: 'dividends',
+          name: 'transactions',
           type: 'array',
           defaultValue: [],
+          admin: {
+            initCollapsed: true,
+          },
           fields: [
             {
-              name: 'amount',
-              type: 'number',
+              name: 'type',
+              type: 'radio',
+              options: [
+                {
+                  label: 'Buy',
+                  value: 'buy',
+                },
+                {
+                  label: 'Sell',
+                  value: 'sell',
+                },
+                {
+                  label: 'Deposit',
+                  value: 'deposit',
+                },
+                {
+                  label: 'Withdrawal',
+                  value: 'withdrawal',
+                },
+              ],
+              required: true,
+              admin: {
+                layout: 'horizontal',
+              },
             },
             {
-              name: 'dividendId',
-              type: 'relationship',
-              relationTo: 'dividends',
+              type: 'row',
+              fields: [
+                {
+                  name: 'sum',
+                  type: 'number',
+                  required: true,
+                },
+                {
+                  name: 'date',
+                  type: 'date',
+                  required: true,
+                  defaultValue: () => new Date(),
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'stockId',
+                  type: 'relationship',
+                  relationTo: 'stocks',
+                },
+                {
+                  name: 'amount',
+                  type: 'number',
+                },
+                {
+                  name: 'price',
+                  type: 'number',
+                }
+              ],
+              admin: {
+                condition: (data, siblingData) => siblingData.type === 'buy' || siblingData.type === 'sell',
+              },
             },
           ],
         }

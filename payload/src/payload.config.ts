@@ -2,8 +2,6 @@ import { buildConfig, Config } from 'payload/config';
 import path from 'path';
 import Users from './collections/Users';
 import Stocks from './collections/Stocks';
-import Transactions from './collections/Transactions';
-import Dividends from './collections/Dividends';
 import { seed } from './seed';
 
 export default buildConfig({
@@ -14,8 +12,6 @@ export default buildConfig({
   collections: [
     Users,
     Stocks,
-    Transactions,
-    Dividends,
   ],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),

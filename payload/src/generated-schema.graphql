@@ -48,7 +48,7 @@ type User_UserDetails {
   birthday: DateTime
   balance: Float
   stocks: [User_UserDetails_Stocks!]
-  dividends: [User_UserDetails_Dividends!]
+  transactions: [User_UserDetails_Transactions!]
 }
 
 type User_UserDetails_Stocks {
@@ -97,10 +97,25 @@ enum FallbackLocaleInputType {
   none
 }
 
-type User_UserDetails_Dividends {
-  amount: Float
-  dividendId(locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): Dividend
+type User_UserDetails_Transactions {
+  type: User_UserDetails_Transactions_type
+  sum: Float
+  date: DateTime
+  stock: User_UserDetails_Transactions_Stock
   id: String
+}
+
+enum User_UserDetails_Transactions_type {
+  buy
+  sell
+  deposit
+  withdraw
+}
+
+type User_UserDetails_Transactions_Stock {
+  stockId(locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): Stock
+  amount: Float
+  price: Float
 }
 
 type Users {
@@ -127,9 +142,13 @@ input User_where {
   userDetails__stocks__amount: User_userDetails__stocks__amount_operator
   userDetails__stocks__stockId: User_userDetails__stocks__stockId_operator
   userDetails__stocks__id: User_userDetails__stocks__id_operator
-  userDetails__dividends__amount: User_userDetails__dividends__amount_operator
-  userDetails__dividends__dividendId: User_userDetails__dividends__dividendId_operator
-  userDetails__dividends__id: User_userDetails__dividends__id_operator
+  userDetails__transactions__type: User_userDetails__transactions__type_operator
+  userDetails__transactions__sum: User_userDetails__transactions__sum_operator
+  userDetails__transactions__date: User_userDetails__transactions__date_operator
+  userDetails__transactions__stock__stockId: User_userDetails__transactions__stock__stockId_operator
+  userDetails__transactions__stock__amount: User_userDetails__transactions__stock__amount_operator
+  userDetails__transactions__stock__price: User_userDetails__transactions__stock__price_operator
+  userDetails__transactions__id: User_userDetails__transactions__id_operator
   email: User_email_operator
   id: User_id_operator
   createdAt: User_createdAt_operator
@@ -234,7 +253,50 @@ input User_userDetails__stocks__id_operator {
   exists: Boolean
 }
 
-input User_userDetails__dividends__amount_operator {
+input User_userDetails__transactions__type_operator {
+  equals: User_userDetails__transactions__type_Input
+  not_equals: User_userDetails__transactions__type_Input
+  in: [User_userDetails__transactions__type_Input]
+  not_in: [User_userDetails__transactions__type_Input]
+  all: [User_userDetails__transactions__type_Input]
+}
+
+enum User_userDetails__transactions__type_Input {
+  buy
+  sell
+  deposit
+  withdraw
+}
+
+input User_userDetails__transactions__sum_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+}
+
+input User_userDetails__transactions__date_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input User_userDetails__transactions__stock__stockId_operator {
+  equals: String
+  not_equals: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_userDetails__transactions__stock__amount_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -244,16 +306,17 @@ input User_userDetails__dividends__amount_operator {
   exists: Boolean
 }
 
-input User_userDetails__dividends__dividendId_operator {
-  equals: String
-  not_equals: String
-  in: [String]
-  not_in: [String]
-  all: [String]
+input User_userDetails__transactions__stock__price_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
   exists: Boolean
 }
 
-input User_userDetails__dividends__id_operator {
+input User_userDetails__transactions__id_operator {
   equals: String
   not_equals: String
   like: String
@@ -321,9 +384,13 @@ input User_where_or {
   userDetails__stocks__amount: User_userDetails__stocks__amount_operator
   userDetails__stocks__stockId: User_userDetails__stocks__stockId_operator
   userDetails__stocks__id: User_userDetails__stocks__id_operator
-  userDetails__dividends__amount: User_userDetails__dividends__amount_operator
-  userDetails__dividends__dividendId: User_userDetails__dividends__dividendId_operator
-  userDetails__dividends__id: User_userDetails__dividends__id_operator
+  userDetails__transactions__type: User_userDetails__transactions__type_operator
+  userDetails__transactions__sum: User_userDetails__transactions__sum_operator
+  userDetails__transactions__date: User_userDetails__transactions__date_operator
+  userDetails__transactions__stock__stockId: User_userDetails__transactions__stock__stockId_operator
+  userDetails__transactions__stock__amount: User_userDetails__transactions__stock__amount_operator
+  userDetails__transactions__stock__price: User_userDetails__transactions__stock__price_operator
+  userDetails__transactions__id: User_userDetails__transactions__id_operator
   email: User_email_operator
   id: User_id_operator
   createdAt: User_createdAt_operator
@@ -340,9 +407,13 @@ input User_where_and {
   userDetails__stocks__amount: User_userDetails__stocks__amount_operator
   userDetails__stocks__stockId: User_userDetails__stocks__stockId_operator
   userDetails__stocks__id: User_userDetails__stocks__id_operator
-  userDetails__dividends__amount: User_userDetails__dividends__amount_operator
-  userDetails__dividends__dividendId: User_userDetails__dividends__dividendId_operator
-  userDetails__dividends__id: User_userDetails__dividends__id_operator
+  userDetails__transactions__type: User_userDetails__transactions__type_operator
+  userDetails__transactions__sum: User_userDetails__transactions__sum_operator
+  userDetails__transactions__date: User_userDetails__transactions__date_operator
+  userDetails__transactions__stock__stockId: User_userDetails__transactions__stock__stockId_operator
+  userDetails__transactions__stock__amount: User_userDetails__transactions__stock__amount_operator
+  userDetails__transactions__stock__price: User_userDetails__transactions__stock__price_operator
+  userDetails__transactions__id: User_userDetails__transactions__id_operator
   email: User_email_operator
   id: User_id_operator
   createdAt: User_createdAt_operator
@@ -465,7 +536,7 @@ type UsersDocAccessFields_userDetails_Fields {
   birthday: UsersDocAccessFields_userDetails_birthday
   balance: UsersDocAccessFields_userDetails_balance
   stocks: UsersDocAccessFields_userDetails_stocks
-  dividends: UsersDocAccessFields_userDetails_dividends
+  transactions: UsersDocAccessFields_userDetails_transactions
 }
 
 type UsersDocAccessFields_userDetails_accountId {
@@ -636,102 +707,226 @@ type UsersDocAccessFields_userDetails_stocks_id_Delete {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends {
-  create: UsersDocAccessFields_userDetails_dividends_Create
-  read: UsersDocAccessFields_userDetails_dividends_Read
-  update: UsersDocAccessFields_userDetails_dividends_Update
-  delete: UsersDocAccessFields_userDetails_dividends_Delete
-  fields: UsersDocAccessFields_userDetails_dividends_Fields
+type UsersDocAccessFields_userDetails_transactions {
+  create: UsersDocAccessFields_userDetails_transactions_Create
+  read: UsersDocAccessFields_userDetails_transactions_Read
+  update: UsersDocAccessFields_userDetails_transactions_Update
+  delete: UsersDocAccessFields_userDetails_transactions_Delete
+  fields: UsersDocAccessFields_userDetails_transactions_Fields
 }
 
-type UsersDocAccessFields_userDetails_dividends_Create {
+type UsersDocAccessFields_userDetails_transactions_Create {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_Read {
+type UsersDocAccessFields_userDetails_transactions_Read {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_Update {
+type UsersDocAccessFields_userDetails_transactions_Update {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_Delete {
+type UsersDocAccessFields_userDetails_transactions_Delete {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_Fields {
-  amount: UsersDocAccessFields_userDetails_dividends_amount
-  dividendId: UsersDocAccessFields_userDetails_dividends_dividendId
-  id: UsersDocAccessFields_userDetails_dividends_id
+type UsersDocAccessFields_userDetails_transactions_Fields {
+  type: UsersDocAccessFields_userDetails_transactions_type
+  sum: UsersDocAccessFields_userDetails_transactions_sum
+  date: UsersDocAccessFields_userDetails_transactions_date
+  stock: UsersDocAccessFields_userDetails_transactions_stock
+  id: UsersDocAccessFields_userDetails_transactions_id
 }
 
-type UsersDocAccessFields_userDetails_dividends_amount {
-  create: UsersDocAccessFields_userDetails_dividends_amount_Create
-  read: UsersDocAccessFields_userDetails_dividends_amount_Read
-  update: UsersDocAccessFields_userDetails_dividends_amount_Update
-  delete: UsersDocAccessFields_userDetails_dividends_amount_Delete
+type UsersDocAccessFields_userDetails_transactions_type {
+  create: UsersDocAccessFields_userDetails_transactions_type_Create
+  read: UsersDocAccessFields_userDetails_transactions_type_Read
+  update: UsersDocAccessFields_userDetails_transactions_type_Update
+  delete: UsersDocAccessFields_userDetails_transactions_type_Delete
 }
 
-type UsersDocAccessFields_userDetails_dividends_amount_Create {
+type UsersDocAccessFields_userDetails_transactions_type_Create {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_amount_Read {
+type UsersDocAccessFields_userDetails_transactions_type_Read {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_amount_Update {
+type UsersDocAccessFields_userDetails_transactions_type_Update {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_amount_Delete {
+type UsersDocAccessFields_userDetails_transactions_type_Delete {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_dividendId {
-  create: UsersDocAccessFields_userDetails_dividends_dividendId_Create
-  read: UsersDocAccessFields_userDetails_dividends_dividendId_Read
-  update: UsersDocAccessFields_userDetails_dividends_dividendId_Update
-  delete: UsersDocAccessFields_userDetails_dividends_dividendId_Delete
+type UsersDocAccessFields_userDetails_transactions_sum {
+  create: UsersDocAccessFields_userDetails_transactions_sum_Create
+  read: UsersDocAccessFields_userDetails_transactions_sum_Read
+  update: UsersDocAccessFields_userDetails_transactions_sum_Update
+  delete: UsersDocAccessFields_userDetails_transactions_sum_Delete
 }
 
-type UsersDocAccessFields_userDetails_dividends_dividendId_Create {
+type UsersDocAccessFields_userDetails_transactions_sum_Create {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_dividendId_Read {
+type UsersDocAccessFields_userDetails_transactions_sum_Read {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_dividendId_Update {
+type UsersDocAccessFields_userDetails_transactions_sum_Update {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_dividendId_Delete {
+type UsersDocAccessFields_userDetails_transactions_sum_Delete {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_id {
-  create: UsersDocAccessFields_userDetails_dividends_id_Create
-  read: UsersDocAccessFields_userDetails_dividends_id_Read
-  update: UsersDocAccessFields_userDetails_dividends_id_Update
-  delete: UsersDocAccessFields_userDetails_dividends_id_Delete
+type UsersDocAccessFields_userDetails_transactions_date {
+  create: UsersDocAccessFields_userDetails_transactions_date_Create
+  read: UsersDocAccessFields_userDetails_transactions_date_Read
+  update: UsersDocAccessFields_userDetails_transactions_date_Update
+  delete: UsersDocAccessFields_userDetails_transactions_date_Delete
 }
 
-type UsersDocAccessFields_userDetails_dividends_id_Create {
+type UsersDocAccessFields_userDetails_transactions_date_Create {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_id_Read {
+type UsersDocAccessFields_userDetails_transactions_date_Read {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_id_Update {
+type UsersDocAccessFields_userDetails_transactions_date_Update {
   permission: Boolean!
 }
 
-type UsersDocAccessFields_userDetails_dividends_id_Delete {
+type UsersDocAccessFields_userDetails_transactions_date_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock {
+  create: UsersDocAccessFields_userDetails_transactions_stock_Create
+  read: UsersDocAccessFields_userDetails_transactions_stock_Read
+  update: UsersDocAccessFields_userDetails_transactions_stock_Update
+  delete: UsersDocAccessFields_userDetails_transactions_stock_Delete
+  fields: UsersDocAccessFields_userDetails_transactions_stock_Fields
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_Fields {
+  stockId: UsersDocAccessFields_userDetails_transactions_stock_stockId
+  amount: UsersDocAccessFields_userDetails_transactions_stock_amount
+  price: UsersDocAccessFields_userDetails_transactions_stock_price
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId {
+  create: UsersDocAccessFields_userDetails_transactions_stock_stockId_Create
+  read: UsersDocAccessFields_userDetails_transactions_stock_stockId_Read
+  update: UsersDocAccessFields_userDetails_transactions_stock_stockId_Update
+  delete: UsersDocAccessFields_userDetails_transactions_stock_stockId_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_stockId_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount {
+  create: UsersDocAccessFields_userDetails_transactions_stock_amount_Create
+  read: UsersDocAccessFields_userDetails_transactions_stock_amount_Read
+  update: UsersDocAccessFields_userDetails_transactions_stock_amount_Update
+  delete: UsersDocAccessFields_userDetails_transactions_stock_amount_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_amount_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price {
+  create: UsersDocAccessFields_userDetails_transactions_stock_price_Create
+  read: UsersDocAccessFields_userDetails_transactions_stock_price_Read
+  update: UsersDocAccessFields_userDetails_transactions_stock_price_Update
+  delete: UsersDocAccessFields_userDetails_transactions_stock_price_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_stock_price_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_id {
+  create: UsersDocAccessFields_userDetails_transactions_id_Create
+  read: UsersDocAccessFields_userDetails_transactions_id_Read
+  update: UsersDocAccessFields_userDetails_transactions_id_Update
+  delete: UsersDocAccessFields_userDetails_transactions_id_Delete
+}
+
+type UsersDocAccessFields_userDetails_transactions_id_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_id_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_id_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_transactions_id_Delete {
   permission: Boolean!
 }
 
@@ -2056,7 +2251,7 @@ type UsersFields_userDetails_Fields {
   birthday: UsersFields_userDetails_birthday
   balance: UsersFields_userDetails_balance
   stocks: UsersFields_userDetails_stocks
-  dividends: UsersFields_userDetails_dividends
+  transactions: UsersFields_userDetails_transactions
 }
 
 type UsersFields_userDetails_accountId {
@@ -2227,102 +2422,226 @@ type UsersFields_userDetails_stocks_id_Delete {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends {
-  create: UsersFields_userDetails_dividends_Create
-  read: UsersFields_userDetails_dividends_Read
-  update: UsersFields_userDetails_dividends_Update
-  delete: UsersFields_userDetails_dividends_Delete
-  fields: UsersFields_userDetails_dividends_Fields
+type UsersFields_userDetails_transactions {
+  create: UsersFields_userDetails_transactions_Create
+  read: UsersFields_userDetails_transactions_Read
+  update: UsersFields_userDetails_transactions_Update
+  delete: UsersFields_userDetails_transactions_Delete
+  fields: UsersFields_userDetails_transactions_Fields
 }
 
-type UsersFields_userDetails_dividends_Create {
+type UsersFields_userDetails_transactions_Create {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_Read {
+type UsersFields_userDetails_transactions_Read {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_Update {
+type UsersFields_userDetails_transactions_Update {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_Delete {
+type UsersFields_userDetails_transactions_Delete {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_Fields {
-  amount: UsersFields_userDetails_dividends_amount
-  dividendId: UsersFields_userDetails_dividends_dividendId
-  id: UsersFields_userDetails_dividends_id
+type UsersFields_userDetails_transactions_Fields {
+  type: UsersFields_userDetails_transactions_type
+  sum: UsersFields_userDetails_transactions_sum
+  date: UsersFields_userDetails_transactions_date
+  stock: UsersFields_userDetails_transactions_stock
+  id: UsersFields_userDetails_transactions_id
 }
 
-type UsersFields_userDetails_dividends_amount {
-  create: UsersFields_userDetails_dividends_amount_Create
-  read: UsersFields_userDetails_dividends_amount_Read
-  update: UsersFields_userDetails_dividends_amount_Update
-  delete: UsersFields_userDetails_dividends_amount_Delete
+type UsersFields_userDetails_transactions_type {
+  create: UsersFields_userDetails_transactions_type_Create
+  read: UsersFields_userDetails_transactions_type_Read
+  update: UsersFields_userDetails_transactions_type_Update
+  delete: UsersFields_userDetails_transactions_type_Delete
 }
 
-type UsersFields_userDetails_dividends_amount_Create {
+type UsersFields_userDetails_transactions_type_Create {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_amount_Read {
+type UsersFields_userDetails_transactions_type_Read {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_amount_Update {
+type UsersFields_userDetails_transactions_type_Update {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_amount_Delete {
+type UsersFields_userDetails_transactions_type_Delete {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_dividendId {
-  create: UsersFields_userDetails_dividends_dividendId_Create
-  read: UsersFields_userDetails_dividends_dividendId_Read
-  update: UsersFields_userDetails_dividends_dividendId_Update
-  delete: UsersFields_userDetails_dividends_dividendId_Delete
+type UsersFields_userDetails_transactions_sum {
+  create: UsersFields_userDetails_transactions_sum_Create
+  read: UsersFields_userDetails_transactions_sum_Read
+  update: UsersFields_userDetails_transactions_sum_Update
+  delete: UsersFields_userDetails_transactions_sum_Delete
 }
 
-type UsersFields_userDetails_dividends_dividendId_Create {
+type UsersFields_userDetails_transactions_sum_Create {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_dividendId_Read {
+type UsersFields_userDetails_transactions_sum_Read {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_dividendId_Update {
+type UsersFields_userDetails_transactions_sum_Update {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_dividendId_Delete {
+type UsersFields_userDetails_transactions_sum_Delete {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_id {
-  create: UsersFields_userDetails_dividends_id_Create
-  read: UsersFields_userDetails_dividends_id_Read
-  update: UsersFields_userDetails_dividends_id_Update
-  delete: UsersFields_userDetails_dividends_id_Delete
+type UsersFields_userDetails_transactions_date {
+  create: UsersFields_userDetails_transactions_date_Create
+  read: UsersFields_userDetails_transactions_date_Read
+  update: UsersFields_userDetails_transactions_date_Update
+  delete: UsersFields_userDetails_transactions_date_Delete
 }
 
-type UsersFields_userDetails_dividends_id_Create {
+type UsersFields_userDetails_transactions_date_Create {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_id_Read {
+type UsersFields_userDetails_transactions_date_Read {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_id_Update {
+type UsersFields_userDetails_transactions_date_Update {
   permission: Boolean!
 }
 
-type UsersFields_userDetails_dividends_id_Delete {
+type UsersFields_userDetails_transactions_date_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock {
+  create: UsersFields_userDetails_transactions_stock_Create
+  read: UsersFields_userDetails_transactions_stock_Read
+  update: UsersFields_userDetails_transactions_stock_Update
+  delete: UsersFields_userDetails_transactions_stock_Delete
+  fields: UsersFields_userDetails_transactions_stock_Fields
+}
+
+type UsersFields_userDetails_transactions_stock_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_Fields {
+  stockId: UsersFields_userDetails_transactions_stock_stockId
+  amount: UsersFields_userDetails_transactions_stock_amount
+  price: UsersFields_userDetails_transactions_stock_price
+}
+
+type UsersFields_userDetails_transactions_stock_stockId {
+  create: UsersFields_userDetails_transactions_stock_stockId_Create
+  read: UsersFields_userDetails_transactions_stock_stockId_Read
+  update: UsersFields_userDetails_transactions_stock_stockId_Update
+  delete: UsersFields_userDetails_transactions_stock_stockId_Delete
+}
+
+type UsersFields_userDetails_transactions_stock_stockId_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_stockId_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_stockId_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_stockId_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_amount {
+  create: UsersFields_userDetails_transactions_stock_amount_Create
+  read: UsersFields_userDetails_transactions_stock_amount_Read
+  update: UsersFields_userDetails_transactions_stock_amount_Update
+  delete: UsersFields_userDetails_transactions_stock_amount_Delete
+}
+
+type UsersFields_userDetails_transactions_stock_amount_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_amount_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_amount_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_amount_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_price {
+  create: UsersFields_userDetails_transactions_stock_price_Create
+  read: UsersFields_userDetails_transactions_stock_price_Read
+  update: UsersFields_userDetails_transactions_stock_price_Update
+  delete: UsersFields_userDetails_transactions_stock_price_Delete
+}
+
+type UsersFields_userDetails_transactions_stock_price_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_price_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_price_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_stock_price_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_id {
+  create: UsersFields_userDetails_transactions_id_Create
+  read: UsersFields_userDetails_transactions_id_Read
+  update: UsersFields_userDetails_transactions_id_Update
+  delete: UsersFields_userDetails_transactions_id_Delete
+}
+
+type UsersFields_userDetails_transactions_id_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_id_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_id_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_transactions_id_Delete {
   permission: Boolean!
 }
 
@@ -3073,7 +3392,7 @@ input mutationUser_UserDetailsInput {
   birthday: String
   balance: Float
   stocks: [mutationUser_UserDetails_StocksInput]
-  dividends: [mutationUser_UserDetails_DividendsInput]
+  transactions: [mutationUser_UserDetails_TransactionsInput]
 }
 
 input mutationUser_UserDetails_StocksInput {
@@ -3082,10 +3401,18 @@ input mutationUser_UserDetails_StocksInput {
   id: String
 }
 
-input mutationUser_UserDetails_DividendsInput {
-  amount: Float
-  dividendId: String
+input mutationUser_UserDetails_TransactionsInput {
+  type: String!
+  sum: Float!
+  date: String!
+  stock: mutationUser_UserDetails_Transactions_StockInput
   id: String
+}
+
+input mutationUser_UserDetails_Transactions_StockInput {
+  stockId: String
+  amount: Float
+  price: Float
 }
 
 input mutationUserUpdateInput {
@@ -3111,7 +3438,7 @@ input mutationUserUpdate_UserDetailsInput {
   birthday: String
   balance: Float
   stocks: [mutationUserUpdate_UserDetails_StocksInput]
-  dividends: [mutationUserUpdate_UserDetails_DividendsInput]
+  transactions: [mutationUserUpdate_UserDetails_TransactionsInput]
 }
 
 input mutationUserUpdate_UserDetails_StocksInput {
@@ -3120,10 +3447,18 @@ input mutationUserUpdate_UserDetails_StocksInput {
   id: String
 }
 
-input mutationUserUpdate_UserDetails_DividendsInput {
-  amount: Float
-  dividendId: String
+input mutationUserUpdate_UserDetails_TransactionsInput {
+  type: String!
+  sum: Float!
+  date: String!
+  stock: mutationUserUpdate_UserDetails_Transactions_StockInput
   id: String
+}
+
+input mutationUserUpdate_UserDetails_Transactions_StockInput {
+  stockId: String
+  amount: Float
+  price: Float
 }
 
 type usersRefreshedUser {

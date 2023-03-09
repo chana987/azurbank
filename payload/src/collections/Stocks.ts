@@ -12,51 +12,85 @@ const Stocks: CollectionConfig = {
   },
   fields: [
     {
-      name: 'name',
-      type: 'text',
-      required: true,
+      type: 'row',
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'hebrewName',
+          type: 'text',
+        },
+      ],
     },
     {
-      name: 'hebrewName',
-      type: 'text',
-    },
-    {
-      name: 'marketValue',
-      type: 'number',
-    },
-    {
-      name: 'symbol',
-      type: 'text',
-      required: true,
-      unique: true,
+      type: 'row',
+      fields: [
+        {
+          name: 'symbol',
+          type: 'text',
+          required: true,
+          unique: true,
+        },
+        {
+          name: 'capital',
+          type: 'number',
+        },
+      ],
     },
     {
       name: 'historicPrices',
       type: 'array',
+      admin: {
+        initCollapsed: true,
+      },
       fields: [
         {
-          name: 'date',
-          type: 'date',
-          required: true,
-        },
-        {
-          name: 'price',
-          type: 'number',
-          required: true,
+          type: 'row',
+          fields: [
+            {
+              name: 'date',
+              type: 'date',
+              required: true,
+            },
+            {
+              name: 'price',
+              type: 'number',
+              required: true,
+            },
+          ],
         },
       ],
     },
     {
       name: 'dividends',
-      type: 'relationship',
-      relationTo: 'dividends',
-      hasMany: true,
-    },
-    {
-      name: 'owners',
-      type: 'relationship',
-      relationTo: 'users',
-      hasMany: true,
+      type: 'array',
+      admin: {
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'quarter',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'date',
+              type: 'date',
+              required: true,
+            },
+            {
+              name: 'amount',
+              type: 'number',
+            },
+          ],
+        }
+      ],
     },
   ],
 };

@@ -28,9 +28,15 @@ export interface User {
       stockId?: string | Stock;
       id?: string;
     }[];
-    dividends: {
-      amount?: number;
-      dividendId?: string | Dividend;
+    transactions: {
+      type: 'buy' | 'sell' | 'deposit' | 'withdraw';
+      sum: number;
+      date: string;
+      stock: {
+        stockId?: string | Stock;
+        amount?: number;
+        price?: number;
+      };
       id?: string;
     }[];
   };

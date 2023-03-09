@@ -15,7 +15,7 @@ export const seed = async (payload: Payload): Promise<void> => {
       userDetails: {
         accountId: 'admin',
         stocks: [],
-        dividends: [],
+        transactions: [],
       },
     }
   });
@@ -142,8 +142,7 @@ export const seed = async (payload: Payload): Promise<void> => {
             stockId: stock4.id,
           },
         ],
-        dividends: [
-        ],
+        transactions: [],
       },
     },
   });
@@ -169,8 +168,7 @@ export const seed = async (payload: Payload): Promise<void> => {
             stockId: stock3.id,
           },
         ],
-        dividends: [
-        ],
+        transactions: [],
       },
     },
   });
@@ -196,8 +194,7 @@ export const seed = async (payload: Payload): Promise<void> => {
             stockId: stock1.id,
           },
         ],
-        dividends: [
-        ],
+        transactions: [],
       },
     },
   });
