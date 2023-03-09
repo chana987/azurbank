@@ -45,9 +45,9 @@ enum User_roles {
 
 type User_UserDetails {
   accountId: String
+  birthday: DateTime
   balance: Float
   stocks: [User_UserDetails_Stocks!]
-  transactions(locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): [Transaction!]
   dividends: [User_UserDetails_Dividends!]
 }
 
@@ -62,6 +62,7 @@ type Stock {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  hebrewName: String
   marketValue: Float
   symbol: String!
   historicPrices: [Stock_HistoricPrices!]
@@ -96,29 +97,6 @@ enum FallbackLocaleInputType {
   none
 }
 
-type Transaction {
-  id: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  type: Transaction_type!
-  sum: Float!
-  date: DateTime!
-  stock: Transaction_Stock
-}
-
-enum Transaction_type {
-  buy
-  sell
-  deposit
-  withdraw
-}
-
-type Transaction_Stock {
-  stockId(locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): Stock
-  amount: Float
-  price: Float
-}
-
 type User_UserDetails_Dividends {
   amount: Float
   dividendId(locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): Dividend
@@ -144,11 +122,11 @@ input User_where {
   lastName: User_lastName_operator
   roles: User_roles_operator
   userDetails__accountId: User_userDetails__accountId_operator
+  userDetails__birthday: User_userDetails__birthday_operator
   userDetails__balance: User_userDetails__balance_operator
   userDetails__stocks__amount: User_userDetails__stocks__amount_operator
   userDetails__stocks__stockId: User_userDetails__stocks__stockId_operator
   userDetails__stocks__id: User_userDetails__stocks__id_operator
-  userDetails__transactions: User_userDetails__transactions_operator
   userDetails__dividends__amount: User_userDetails__dividends__amount_operator
   userDetails__dividends__dividendId: User_userDetails__dividends__dividendId_operator
   userDetails__dividends__id: User_userDetails__dividends__id_operator
@@ -205,6 +183,17 @@ input User_userDetails__accountId_operator {
   exists: Boolean
 }
 
+input User_userDetails__birthday_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
 input User_userDetails__balance_operator {
   equals: Float
   not_equals: Float
@@ -239,15 +228,6 @@ input User_userDetails__stocks__id_operator {
   not_equals: String
   like: String
   contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input User_userDetails__transactions_operator {
-  equals: String
-  not_equals: String
   in: [String]
   not_in: [String]
   all: [String]
@@ -336,11 +316,11 @@ input User_where_or {
   lastName: User_lastName_operator
   roles: User_roles_operator
   userDetails__accountId: User_userDetails__accountId_operator
+  userDetails__birthday: User_userDetails__birthday_operator
   userDetails__balance: User_userDetails__balance_operator
   userDetails__stocks__amount: User_userDetails__stocks__amount_operator
   userDetails__stocks__stockId: User_userDetails__stocks__stockId_operator
   userDetails__stocks__id: User_userDetails__stocks__id_operator
-  userDetails__transactions: User_userDetails__transactions_operator
   userDetails__dividends__amount: User_userDetails__dividends__amount_operator
   userDetails__dividends__dividendId: User_userDetails__dividends__dividendId_operator
   userDetails__dividends__id: User_userDetails__dividends__id_operator
@@ -355,11 +335,11 @@ input User_where_and {
   lastName: User_lastName_operator
   roles: User_roles_operator
   userDetails__accountId: User_userDetails__accountId_operator
+  userDetails__birthday: User_userDetails__birthday_operator
   userDetails__balance: User_userDetails__balance_operator
   userDetails__stocks__amount: User_userDetails__stocks__amount_operator
   userDetails__stocks__stockId: User_userDetails__stocks__stockId_operator
   userDetails__stocks__id: User_userDetails__stocks__id_operator
-  userDetails__transactions: User_userDetails__transactions_operator
   userDetails__dividends__amount: User_userDetails__dividends__amount_operator
   userDetails__dividends__dividendId: User_userDetails__dividends__dividendId_operator
   userDetails__dividends__id: User_userDetails__dividends__id_operator
@@ -482,9 +462,9 @@ type UsersDocAccessFields_userDetails_Delete {
 
 type UsersDocAccessFields_userDetails_Fields {
   accountId: UsersDocAccessFields_userDetails_accountId
+  birthday: UsersDocAccessFields_userDetails_birthday
   balance: UsersDocAccessFields_userDetails_balance
   stocks: UsersDocAccessFields_userDetails_stocks
-  transactions: UsersDocAccessFields_userDetails_transactions
   dividends: UsersDocAccessFields_userDetails_dividends
 }
 
@@ -508,6 +488,29 @@ type UsersDocAccessFields_userDetails_accountId_Update {
 }
 
 type UsersDocAccessFields_userDetails_accountId_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_birthday {
+  create: UsersDocAccessFields_userDetails_birthday_Create
+  read: UsersDocAccessFields_userDetails_birthday_Read
+  update: UsersDocAccessFields_userDetails_birthday_Update
+  delete: UsersDocAccessFields_userDetails_birthday_Delete
+}
+
+type UsersDocAccessFields_userDetails_birthday_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_birthday_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_birthday_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_userDetails_birthday_Delete {
   permission: Boolean!
 }
 
@@ -630,29 +633,6 @@ type UsersDocAccessFields_userDetails_stocks_id_Update {
 }
 
 type UsersDocAccessFields_userDetails_stocks_id_Delete {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_userDetails_transactions {
-  create: UsersDocAccessFields_userDetails_transactions_Create
-  read: UsersDocAccessFields_userDetails_transactions_Read
-  update: UsersDocAccessFields_userDetails_transactions_Update
-  delete: UsersDocAccessFields_userDetails_transactions_Delete
-}
-
-type UsersDocAccessFields_userDetails_transactions_Create {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_userDetails_transactions_Read {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_userDetails_transactions_Update {
-  permission: Boolean!
-}
-
-type UsersDocAccessFields_userDetails_transactions_Delete {
   permission: Boolean!
 }
 
@@ -854,6 +834,7 @@ type Stocks {
 
 input Stock_where {
   name: Stock_name_operator
+  hebrewName: Stock_hebrewName_operator
   marketValue: Stock_marketValue_operator
   symbol: Stock_symbol_operator
   historicPrices__date: Stock_historicPrices__date_operator
@@ -876,6 +857,17 @@ input Stock_name_operator {
   in: [String]
   not_in: [String]
   all: [String]
+}
+
+input Stock_hebrewName_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
 }
 
 input Stock_marketValue_operator {
@@ -979,6 +971,7 @@ input Stock_updatedAt_operator {
 
 input Stock_where_or {
   name: Stock_name_operator
+  hebrewName: Stock_hebrewName_operator
   marketValue: Stock_marketValue_operator
   symbol: Stock_symbol_operator
   historicPrices__date: Stock_historicPrices__date_operator
@@ -993,6 +986,7 @@ input Stock_where_or {
 
 input Stock_where_and {
   name: Stock_name_operator
+  hebrewName: Stock_hebrewName_operator
   marketValue: Stock_marketValue_operator
   symbol: Stock_symbol_operator
   historicPrices__date: Stock_historicPrices__date_operator
@@ -1015,6 +1009,7 @@ type stocksDocAccess {
 
 type StocksDocAccessFields {
   name: StocksDocAccessFields_name
+  hebrewName: StocksDocAccessFields_hebrewName
   marketValue: StocksDocAccessFields_marketValue
   symbol: StocksDocAccessFields_symbol
   historicPrices: StocksDocAccessFields_historicPrices
@@ -1042,6 +1037,29 @@ type StocksDocAccessFields_name_Update {
 }
 
 type StocksDocAccessFields_name_Delete {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_hebrewName {
+  create: StocksDocAccessFields_hebrewName_Create
+  read: StocksDocAccessFields_hebrewName_Read
+  update: StocksDocAccessFields_hebrewName_Update
+  delete: StocksDocAccessFields_hebrewName_Delete
+}
+
+type StocksDocAccessFields_hebrewName_Create {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_hebrewName_Read {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_hebrewName_Update {
+  permission: Boolean!
+}
+
+type StocksDocAccessFields_hebrewName_Delete {
   permission: Boolean!
 }
 
@@ -1256,6 +1274,30 @@ type StocksDeleteDocAccess {
   where: JSONObject
 }
 
+type Transaction {
+  id: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user(locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): User!
+  type: Transaction_type!
+  sum: Float!
+  date: DateTime!
+  stock: Transaction_Stock
+}
+
+enum Transaction_type {
+  buy
+  sell
+  deposit
+  withdraw
+}
+
+type Transaction_Stock {
+  stockId(locale: LocaleInputType, fallbackLocale: FallbackLocaleInputType): Stock
+  amount: Float
+  price: Float
+}
+
 type Transactions {
   docs: [Transaction]
   totalDocs: Int
@@ -1271,6 +1313,7 @@ type Transactions {
 }
 
 input Transaction_where {
+  user: Transaction_user_operator
   type: Transaction_type_operator
   sum: Transaction_sum_operator
   date: Transaction_date_operator
@@ -1282,6 +1325,14 @@ input Transaction_where {
   updatedAt: Transaction_updatedAt_operator
   OR: [Transaction_where_or]
   AND: [Transaction_where_and]
+}
+
+input Transaction_user_operator {
+  equals: String
+  not_equals: String
+  in: [String]
+  not_in: [String]
+  all: [String]
 }
 
 input Transaction_type_operator {
@@ -1379,6 +1430,7 @@ input Transaction_updatedAt_operator {
 }
 
 input Transaction_where_or {
+  user: Transaction_user_operator
   type: Transaction_type_operator
   sum: Transaction_sum_operator
   date: Transaction_date_operator
@@ -1391,6 +1443,7 @@ input Transaction_where_or {
 }
 
 input Transaction_where_and {
+  user: Transaction_user_operator
   type: Transaction_type_operator
   sum: Transaction_sum_operator
   date: Transaction_date_operator
@@ -1411,10 +1464,34 @@ type transactionsDocAccess {
 }
 
 type TransactionsDocAccessFields {
+  user: TransactionsDocAccessFields_user
   type: TransactionsDocAccessFields_type
   sum: TransactionsDocAccessFields_sum
   date: TransactionsDocAccessFields_date
   stock: TransactionsDocAccessFields_stock
+}
+
+type TransactionsDocAccessFields_user {
+  create: TransactionsDocAccessFields_user_Create
+  read: TransactionsDocAccessFields_user_Read
+  update: TransactionsDocAccessFields_user_Update
+  delete: TransactionsDocAccessFields_user_Delete
+}
+
+type TransactionsDocAccessFields_user_Create {
+  permission: Boolean!
+}
+
+type TransactionsDocAccessFields_user_Read {
+  permission: Boolean!
+}
+
+type TransactionsDocAccessFields_user_Update {
+  permission: Boolean!
+}
+
+type TransactionsDocAccessFields_user_Delete {
+  permission: Boolean!
 }
 
 type TransactionsDocAccessFields_type {
@@ -1976,9 +2053,9 @@ type UsersFields_userDetails_Delete {
 
 type UsersFields_userDetails_Fields {
   accountId: UsersFields_userDetails_accountId
+  birthday: UsersFields_userDetails_birthday
   balance: UsersFields_userDetails_balance
   stocks: UsersFields_userDetails_stocks
-  transactions: UsersFields_userDetails_transactions
   dividends: UsersFields_userDetails_dividends
 }
 
@@ -2002,6 +2079,29 @@ type UsersFields_userDetails_accountId_Update {
 }
 
 type UsersFields_userDetails_accountId_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_birthday {
+  create: UsersFields_userDetails_birthday_Create
+  read: UsersFields_userDetails_birthday_Read
+  update: UsersFields_userDetails_birthday_Update
+  delete: UsersFields_userDetails_birthday_Delete
+}
+
+type UsersFields_userDetails_birthday_Create {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_birthday_Read {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_birthday_Update {
+  permission: Boolean!
+}
+
+type UsersFields_userDetails_birthday_Delete {
   permission: Boolean!
 }
 
@@ -2124,29 +2224,6 @@ type UsersFields_userDetails_stocks_id_Update {
 }
 
 type UsersFields_userDetails_stocks_id_Delete {
-  permission: Boolean!
-}
-
-type UsersFields_userDetails_transactions {
-  create: UsersFields_userDetails_transactions_Create
-  read: UsersFields_userDetails_transactions_Read
-  update: UsersFields_userDetails_transactions_Update
-  delete: UsersFields_userDetails_transactions_Delete
-}
-
-type UsersFields_userDetails_transactions_Create {
-  permission: Boolean!
-}
-
-type UsersFields_userDetails_transactions_Read {
-  permission: Boolean!
-}
-
-type UsersFields_userDetails_transactions_Update {
-  permission: Boolean!
-}
-
-type UsersFields_userDetails_transactions_Delete {
   permission: Boolean!
 }
 
@@ -2330,6 +2407,7 @@ type stocksAccess {
 
 type StocksFields {
   name: StocksFields_name
+  hebrewName: StocksFields_hebrewName
   marketValue: StocksFields_marketValue
   symbol: StocksFields_symbol
   historicPrices: StocksFields_historicPrices
@@ -2357,6 +2435,29 @@ type StocksFields_name_Update {
 }
 
 type StocksFields_name_Delete {
+  permission: Boolean!
+}
+
+type StocksFields_hebrewName {
+  create: StocksFields_hebrewName_Create
+  read: StocksFields_hebrewName_Read
+  update: StocksFields_hebrewName_Update
+  delete: StocksFields_hebrewName_Delete
+}
+
+type StocksFields_hebrewName_Create {
+  permission: Boolean!
+}
+
+type StocksFields_hebrewName_Read {
+  permission: Boolean!
+}
+
+type StocksFields_hebrewName_Update {
+  permission: Boolean!
+}
+
+type StocksFields_hebrewName_Delete {
   permission: Boolean!
 }
 
@@ -2580,10 +2681,34 @@ type transactionsAccess {
 }
 
 type TransactionsFields {
+  user: TransactionsFields_user
   type: TransactionsFields_type
   sum: TransactionsFields_sum
   date: TransactionsFields_date
   stock: TransactionsFields_stock
+}
+
+type TransactionsFields_user {
+  create: TransactionsFields_user_Create
+  read: TransactionsFields_user_Read
+  update: TransactionsFields_user_Update
+  delete: TransactionsFields_user_Delete
+}
+
+type TransactionsFields_user_Create {
+  permission: Boolean!
+}
+
+type TransactionsFields_user_Read {
+  permission: Boolean!
+}
+
+type TransactionsFields_user_Update {
+  permission: Boolean!
+}
+
+type TransactionsFields_user_Delete {
+  permission: Boolean!
 }
 
 type TransactionsFields_type {
@@ -2945,9 +3070,9 @@ enum User_roles_MutationInput {
 
 input mutationUser_UserDetailsInput {
   accountId: String
+  birthday: String
   balance: Float
   stocks: [mutationUser_UserDetails_StocksInput]
-  transactions: [String]
   dividends: [mutationUser_UserDetails_DividendsInput]
 }
 
@@ -2983,9 +3108,9 @@ enum UserUpdate_roles_MutationInput {
 
 input mutationUserUpdate_UserDetailsInput {
   accountId: String
+  birthday: String
   balance: Float
   stocks: [mutationUserUpdate_UserDetails_StocksInput]
-  transactions: [String]
   dividends: [mutationUserUpdate_UserDetails_DividendsInput]
 }
 
@@ -3037,6 +3162,7 @@ type usersResetPassword {
 
 input mutationStockInput {
   name: String!
+  hebrewName: String
   marketValue: Float
   symbol: String!
   historicPrices: [mutationStock_HistoricPricesInput]
@@ -3052,6 +3178,7 @@ input mutationStock_HistoricPricesInput {
 
 input mutationStockUpdateInput {
   name: String
+  hebrewName: String
   marketValue: Float
   symbol: String
   historicPrices: [mutationStockUpdate_HistoricPricesInput]
@@ -3066,6 +3193,7 @@ input mutationStockUpdate_HistoricPricesInput {
 }
 
 input mutationTransactionInput {
+  user: String
   type: String!
   sum: Float!
   date: String!
@@ -3079,6 +3207,7 @@ input mutationTransaction_StockInput {
 }
 
 input mutationTransactionUpdateInput {
+  user: String
   type: String
   sum: Float
   date: String

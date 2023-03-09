@@ -21,6 +21,7 @@ export interface User {
   roles: ('admin' | 'kid')[];
   userDetails: {
     accountId?: string;
+    birthday?: string;
     balance?: number;
     stocks: {
       amount?: number;
