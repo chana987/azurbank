@@ -38,7 +38,7 @@ export const GET_ALL_USERS = gql`
   query Users{
     Users {
       docs {
-        firstName
+        username
         lastName
         id
         email
@@ -79,7 +79,7 @@ export const GET_USER = gql`
           birthday
           createdAt
           email
-          firstName
+          username
           gender
           joinDate
           lastName

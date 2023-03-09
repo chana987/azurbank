@@ -81,7 +81,7 @@ export const formatUser = (u: any): User => {
 		balance: u?.attributes?.balance,
 		birthday: u?.attributes?.birthday,
 		email: u?.attributes?.email,
-		firstName: u?.attributes?.firstName,
+		username: u?.attributes?.username,
 		gender: u?.attributes,
 		joinDate: u?.attributes?.joinDate || u?.attributes?.createdAt,
 		lastName: u?.attributes?.lastName,

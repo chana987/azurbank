@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload/types';
+import { isAdmin } from '../access';
 
 const Stocks: CollectionConfig = {
   slug: 'stocks',
@@ -6,6 +7,7 @@ const Stocks: CollectionConfig = {
     useAsTitle: 'name',
   },
   access: {
+    create: isAdmin,
     read: () => true,
   },
   fields: [
@@ -13,6 +15,10 @@ const Stocks: CollectionConfig = {
       name: 'name',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'hebrewName',
+      type: 'text',
     },
     {
       name: 'marketValue',
@@ -39,6 +45,18 @@ const Stocks: CollectionConfig = {
           required: true,
         },
       ],
+    },
+    {
+      name: 'dividends',
+      type: 'relationship',
+      relationTo: 'dividends',
+      hasMany: true,
+    },
+    {
+      name: 'owners',
+      type: 'relationship',
+      relationTo: 'users',
+      hasMany: true,
     },
   ],
 };

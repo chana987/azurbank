@@ -125,7 +125,7 @@ export const usersColumnHeaders: MRT_ColumnDef<User>[] = [
 	},
 	{
 		header: 'שם העמית/ה',
-		accessorKey: 'firstName',
+		accessorKey: 'username',
 	},
 	{
 		header: 'שם משפחה',

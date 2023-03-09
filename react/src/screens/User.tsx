@@ -57,7 +57,7 @@ const SingleUser = () => {
 						xs={6}
 					>
 						<Typography>
-							{`${user?.firstName} ${user?.lastName}`}
+							{`${user?.username} ${user?.lastName}`}
 						</Typography>
 						<Typography>
 							{user?.id}

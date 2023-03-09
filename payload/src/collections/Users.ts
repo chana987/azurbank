@@ -1,19 +1,26 @@
 import { CollectionConfig } from 'payload/types';
+import { isAdmin, isAdminOrHasSiteAccess, isAdminOrSelf } from '../access';
 
 const Users: CollectionConfig = {
   slug: 'users',
-  auth: true,
+  auth: {
+    depth: 2,
+  },
   admin: {
-    useAsTitle: 'firstName',
+    useAsTitle: 'username',
   },
   access: {
-    read: () => true,
+    create: isAdmin,
+    read: isAdminOrHasSiteAccess(),
+    update: isAdminOrSelf,
+    delete: isAdmin,
   },
   fields: [
     {
-      name: 'firstName',
+      name: 'username',
       type: 'text',
       required: true,
+      saveToJWT: true,
     },
     {
       name: 'lastName',
@@ -22,19 +29,21 @@ const Users: CollectionConfig = {
     {
       name: 'email',
       type: 'text',
-      required: false,
     },
     {
-      name: 'role',
-      type: 'radio',
+      name: 'roles',
+      saveToJWT: true,
+      type: 'select',
+      hasMany: true,
+      defaultValue: ['kid'],
       options: [
         {
           label: 'Admin',
           value: 'admin',
         },
         {
-          label: 'User',
-          value: 'user',
+          label: 'Kid',
+          value: 'kid',
         },
       ],
       required: true,
@@ -46,9 +55,11 @@ const Users: CollectionConfig = {
         {
           name: 'accountId',
           type: 'text',
-          required: true,
           unique: true,
-          saveToJWT: true,
+        },
+        {
+          name: 'birthday',
+          type: 'date',
         },
         {
           name: 'balance',
@@ -58,89 +69,38 @@ const Users: CollectionConfig = {
         {
           name: 'stocks',
           type: 'array',
+          defaultValue: [],
           fields: [
             {
               name: 'amount',
               type: 'number',
-              required: true,
             },
             {
               name: 'stockId',
               type: 'relationship',
               relationTo: 'stocks',
-              required: true,
-              unique: true,
             },
           ],
         },
         {
-          name: 'transactions',
+          name: 'dividends',
           type: 'array',
+          defaultValue: [],
           fields: [
             {
-              name: 'type',
-              type: 'radio',
-              options: [
-                {
-                  label: 'Buy',
-                  value: 'buy',
-                },
-                {
-                  label: 'Sell',
-                  value: 'sell',
-                },
-                {
-                  label: 'Deposit',
-                  value: 'deposit',
-                },
-                {
-                  label: 'Withdraw',
-                  value: 'withdraw',
-                },
-              ],
-              required: true,
-              admin: {
-                layout: 'horizontal',
-              },
-            },
-            {
-              name: 'sum',
+              name: 'amount',
               type: 'number',
             },
             {
-              name: 'date',
-              type: 'date',
-              required: true,
-              defaultValue: () => new Date(),
-            },
-            {
-              name: 'stock',
-              type: 'group',
-              fields: [
-                {
-                  name: 'stockId',
-                  type: 'relationship',
-                  relationTo: 'stocks',
-                },
-                {
-                  name: 'amount',
-                  type: 'number',
-                },
-                {
-                  name: 'price',
-                  type: 'number',
-                }
-              ],
-              admin: {
-                condition: (data, siblingData) => siblingData.type === 'buy' || siblingData.type === 'sell',
-                hideGutter: true,
-              },
+              name: 'dividendId',
+              type: 'relationship',
+              relationTo: 'dividends',
             },
           ],
-        },
+        }
       ],
       admin: {
-        condition: (data, siblingData) => siblingData.role === 'user',
+        condition: (data, siblingData) => siblingData.roles.includes('kid'),
       },
     },
   ],

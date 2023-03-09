@@ -9,31 +9,27 @@ export interface Config {
   collections: {
     users: User;
     stocks: Stock;
+    transactions: Transaction;
+    dividends: Dividend;
   };
   globals: {};
 }
 export interface User {
   id: string;
-  firstName: string;
+  username: string;
   lastName?: string;
-  role: 'admin' | 'user';
+  roles: ('admin' | 'kid')[];
   userDetails: {
-    accountId: string;
+    accountId?: string;
     balance?: number;
     stocks: {
-      amount: number;
-      stockId: string | Stock;
+      amount?: number;
+      stockId?: string | Stock;
       id?: string;
     }[];
-    transactions: {
-      type: 'buy' | 'sell' | 'deposit' | 'withdraw';
-      sum?: number;
-      date: string;
-      stock: {
-        stockId?: string | Stock;
-        amount?: number;
-        price?: number;
-      };
+    dividends: {
+      amount?: number;
+      dividendId?: string | Dividend;
       id?: string;
     }[];
   };
@@ -49,6 +45,7 @@ export interface User {
 export interface Stock {
   id: string;
   name: string;
+  hebrewName?: string;
   marketValue?: number;
   symbol: string;
   historicPrices: {
@@ -56,6 +53,31 @@ export interface Stock {
     price: number;
     id?: string;
   }[];
+  dividends?: string[] | Dividend[];
+  owners?: string[] | User[];
+  createdAt: string;
+  updatedAt: string;
+}
+export interface Dividend {
+  id: string;
+  quarter: string;
+  date: string;
+  amount?: number;
+  stock?: string | Stock;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface Transaction {
+  id: string;
+  user: string | User;
+  type: 'buy' | 'sell' | 'deposit' | 'withdraw';
+  sum: number;
+  date: string;
+  stock: {
+    stockId?: string | Stock;
+    amount?: number;
+    price?: number;
+  };
   createdAt: string;
   updatedAt: string;
 }

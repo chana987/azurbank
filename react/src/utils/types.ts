@@ -121,7 +121,7 @@ export interface User {
   balance?: number;
   birthday?: Date;
   email?: string;
-  firstName?: string;
+  username?: string;
   gender?: Gender;
   joinDate: Date;
   lastName?: string;
