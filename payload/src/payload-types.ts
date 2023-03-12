@@ -7,45 +7,21 @@
 
 export interface Config {
   collections: {
-    users: User;
+    dividends: Dividend;
     stocks: Stock;
+    users: User;
   };
   globals: {};
 }
-export interface User {
+export interface Dividend {
   id: string;
-  username: string;
-  lastName?: string;
-  roles: ('admin' | 'kid')[];
-  userDetails: {
-    accountId?: string;
-    birthday?: string;
-    portfolioValue?: number;
-    balance?: number;
-    stocks: {
-      stockId?: string | Stock;
-      amount?: number;
-      id?: string;
-    }[];
-    transactions: {
-      type: 'buy' | 'sell' | 'deposit' | 'withdrawal';
-      status?: 'pending' | 'completed';
-      sum: number;
-      date: string;
-      stockId?: string | Stock;
-      amount?: number;
-      price?: number;
-      id?: string;
-    }[];
-  };
-  email?: string;
-  resetPasswordToken?: string;
-  resetPasswordExpiration?: string;
-  loginAttempts?: number;
-  lockUntil?: string;
+  stock: string | Stock;
+  quarter?: string;
+  dividend: number;
+  date: string;
+  xdate?: string;
   createdAt: string;
   updatedAt: string;
-  password?: string;
 }
 export interface Stock {
   id: string;
@@ -64,12 +40,49 @@ export interface Stock {
     id?: string;
   }[];
   dividends: {
-    quarter: string;
-    date: string;
-    xdate?: string;
-    amount?: number;
+    dividend?: string | Dividend;
     id?: string;
   }[];
   createdAt: string;
   updatedAt: string;
+}
+export interface User {
+  id: string;
+  username: string;
+  lastName?: string;
+  roles: ('admin' | 'kid')[];
+  userDetails: {
+    accountId?: string;
+    birthday?: string;
+    portfolioValue?: number;
+    balance?: number;
+    stocks: {
+      stock?: string | Stock;
+      quantity?: number;
+      id?: string;
+    }[];
+    transactions: {
+      type: 'buy' | 'sell' | 'deposit' | 'withdrawal';
+      status?: 'pending' | 'completed';
+      sum: number;
+      date: string;
+      stock?: string | Stock;
+      quantity?: number;
+      price?: number;
+      id?: string;
+    }[];
+    dividends: {
+      dividend?: string | Dividend;
+      quantity?: number;
+      id?: string;
+    }[];
+  };
+  email?: string;
+  resetPasswordToken?: string;
+  resetPasswordExpiration?: string;
+  loginAttempts?: number;
+  lockUntil?: string;
+  createdAt: string;
+  updatedAt: string;
+  password?: string;
 }

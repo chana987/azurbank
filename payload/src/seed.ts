@@ -16,6 +16,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         accountId: 'admin',
         stocks: [],
         transactions: [],
+        dividends: [],
       },
     }
   });
@@ -47,8 +48,7 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 20460.00,
         },
       ],
-      dividends: [
-      ],
+      dividends: [],
     },
   });
 
@@ -70,8 +70,7 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 2029.00,
         },
       ],
-      dividends: [
-      ],
+      dividends: [],
     },
   });
 
@@ -93,8 +92,7 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 3635.00,
         },
       ],
-      dividends: [
-      ],
+      dividends: [],
     },
   });
 
@@ -116,8 +114,7 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 436.4,
         },
       ],
-      dividends: [
-      ],
+      dividends: [],
     },
   });
 
@@ -134,15 +131,16 @@ export const seed = async (payload: Payload): Promise<void> => {
         accountId: 'YSRL',
         stocks: [
           {
-            amount: 1.5,
-            stockId: stock2.id,
+            quantity: 1.5,
+            stock: stock2.id,
           },
           {
-            amount: 2,
-            stockId: stock4.id,
+            quantity: 2,
+            stock: stock4.id,
           },
         ],
         transactions: [],
+        dividends: [],
       },
     },
   });
@@ -160,15 +158,16 @@ export const seed = async (payload: Payload): Promise<void> => {
         accountId: 'GFN',
         stocks: [
           {
-            amount: 1,
-            stockId: stock2.id,
+            quantity: 1,
+            stock: stock2.id,
           },
           {
-            amount: 0.333,
-            stockId: stock3.id,
+            quantity: 0.333,
+            stock: stock3.id,
           },
         ],
         transactions: [],
+        dividends: [],
       },
     },
   });
@@ -186,15 +185,16 @@ export const seed = async (payload: Payload): Promise<void> => {
         accountId: 'HDS',
         stocks: [
           {
-            amount: 1,
-            stockId: stock2.id,
+            quantity: 1,
+            stock: stock2.id,
           },
           {
-            amount: 0.04,
-            stockId: stock1.id,
+            quantity: 0.04,
+            stock: stock1.id,
           },
         ],
         transactions: [],
+        dividends: [],
       },
     },
   });

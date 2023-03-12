@@ -37,17 +37,14 @@ const Stocks: CollectionConfig = {
         {
           name: 'ISIN',
           type: 'text',
-          unique: true,
         },
         {
           name: 'issuerId',
           type: 'number',
-          unique: true,
         },
         {
           name: 'securityId',
           type: 'number',
-          unique: true,
         },
       ],
     },
@@ -74,6 +71,7 @@ const Stocks: CollectionConfig = {
       admin: {
         initCollapsed: true,
       },
+      defaultValue: [],
       fields: [
         {
           type: 'row',
@@ -98,32 +96,15 @@ const Stocks: CollectionConfig = {
       admin: {
         initCollapsed: true,
       },
+      defaultValue: [],
       fields: [
         {
-          type: 'row',
-          fields: [
-            {
-              name: 'quarter',
-              type: 'text',
-              required: true,
-            },
-            {
-              name: 'date',
-              type: 'date',
-              required: true,
-            },
-            {
-              name: 'xdate',
-              type: 'date',
-            },
-            {
-              name: 'amount',
-              type: 'number',
-            },
-          ],
-        }
+          name: 'dividend',
+          type: 'relationship',
+          relationTo: 'dividends',
+        },
       ],
-    },
+    }
   ],
 };
 
