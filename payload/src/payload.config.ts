@@ -3,6 +3,7 @@ import path from 'path';
 import Users from './collections/Users';
 import Stocks from './collections/Stocks';
 import { seed } from './seed';
+import Dividends from './collections/Dividends';
 
 export default buildConfig({
   serverURL: process.env.SERVER_URL,
@@ -10,8 +11,9 @@ export default buildConfig({
     user: Users.slug,
   },
   collections: [
-    Users,
+    Dividends,
     Stocks,
+    Users,
   ],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),

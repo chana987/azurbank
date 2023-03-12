@@ -105,12 +105,12 @@ const Users: CollectionConfig = {
               type: 'row',
               fields: [
                 {
-                  name: 'stockId',
+                  name: 'stock',
                   type: 'relationship',
                   relationTo: 'stocks',
                 },
                 {
-                  name: 'amount',
+                  name: 'quantity',
                   type: 'number',
                 },
               ],
@@ -189,12 +189,12 @@ const Users: CollectionConfig = {
               type: 'row',
               fields: [
                 {
-                  name: 'stockId',
+                  name: 'stock',
                   type: 'relationship',
                   relationTo: 'stocks',
                 },
                 {
-                  name: 'amount',
+                  name: 'quantity',
                   type: 'number',
                 },
                 {
@@ -207,7 +207,31 @@ const Users: CollectionConfig = {
               },
             },
           ],
-        }
+        },
+        {
+          name: 'dividends',
+          type: 'array',
+          defaultValue: [],
+          admin: {
+            initCollapsed: true,
+          },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'dividend',
+                  type: 'relationship',
+                  relationTo: 'dividends',
+                },
+                {
+                  name: 'quantity',
+                  type: 'number',
+                },
+              ],
+            },
+          ],
+        },
       ],
       admin: {
         condition: (data, siblingData) => siblingData?.roles?.includes('kid'),

@@ -9,8 +9,8 @@ export interface User {
     portfolioValue?: number;
     balance?: number;
     stocks: {
-      stockId?: string | Stock;
-      amount?: number;
+      stock?: string | Stock;
+      quantity?: number;
       id?: string;
     }[];
     transactions: {
@@ -18,8 +18,8 @@ export interface User {
       status?: 'pending' | 'completed';
       sum: number;
       date: string;
-      stockId?: string | Stock;
-      amount?: number;
+      stock?: string | Stock;
+      quantity?: number;
       price?: number;
       id?: string;
     }[];
@@ -53,7 +53,7 @@ export interface Stock {
     quarter: string;
     date: string;
     xdate?: string;
-    amount?: number;
+    dividend?: number;
     id?: string;
   }[];
   createdAt: string;
