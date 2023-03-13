@@ -34,6 +34,7 @@ export interface Stock {
   PE?: number;
   DPR?: number;
   capital?: number;
+  latestPrice?: number;
   historicPrices: {
     date: string;
     price: number;
@@ -51,32 +52,30 @@ export interface User {
   username: string;
   lastName?: string;
   roles: ('admin' | 'kid')[];
-  userDetails: {
-    accountId?: string;
-    birthday?: string;
-    portfolioValue?: number;
-    balance?: number;
-    stocks: {
-      stock?: string | Stock;
-      quantity?: number;
-      id?: string;
-    }[];
-    transactions: {
-      type: 'buy' | 'sell' | 'deposit' | 'withdrawal';
-      status?: 'pending' | 'completed';
-      sum: number;
-      date: string;
-      stock?: string | Stock;
-      quantity?: number;
-      price?: number;
-      id?: string;
-    }[];
+  accountId?: string;
+  birthday?: string;
+  portfolioValue?: number;
+  balance?: number;
+  stocks: {
+    stock?: string | Stock;
+    quantity?: number;
     dividends: {
       dividend?: string | Dividend;
       quantity?: number;
       id?: string;
     }[];
-  };
+    id?: string;
+  }[];
+  transactions: {
+    type: 'buy' | 'sell' | 'deposit' | 'withdrawal';
+    status?: 'pending' | 'completed';
+    sum: number;
+    date: string;
+    stock?: string | Stock;
+    quantity?: number;
+    price?: number;
+    id?: string;
+  }[];
   email?: string;
   resetPasswordToken?: string;
   resetPasswordExpiration?: string;

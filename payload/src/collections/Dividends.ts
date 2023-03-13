@@ -1,5 +1,6 @@
 import { CollectionConfig } from 'payload/types';
 import { isAdmin } from '../access';
+import { addDividendsToUsers } from '../hooks/collections';
 
 const Dividends: CollectionConfig = {
   slug: 'dividends',
@@ -9,6 +10,11 @@ const Dividends: CollectionConfig = {
   access: {
     create: isAdmin,
     read: () => true,
+  },
+  hooks: {
+    afterChange: [
+      addDividendsToUsers,
+    ],
   },
   fields: [
     {

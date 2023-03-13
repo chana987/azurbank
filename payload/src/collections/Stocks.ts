@@ -1,5 +1,6 @@
 import { CollectionConfig } from 'payload/types';
 import { isAdmin } from '../access';
+import { setLatestPrice, sortPricesByDate } from '../hooks/collections';
 
 const Stocks: CollectionConfig = {
   slug: 'stocks',
@@ -9,6 +10,12 @@ const Stocks: CollectionConfig = {
   access: {
     create: isAdmin,
     read: () => true,
+  },
+  hooks: {
+    afterChange: [
+      sortPricesByDate,
+      setLatestPrice,
+    ],
   },
   fields: [
     {
@@ -63,6 +70,13 @@ const Stocks: CollectionConfig = {
           name: 'capital',
           type: 'number',
         },
+        {
+          name: 'latestPrice',
+          type: 'number',
+          admin: {
+            readOnly: true,
+          },
+        }
       ],
     },
     {
@@ -80,6 +94,7 @@ const Stocks: CollectionConfig = {
               name: 'date',
               type: 'date',
               required: true,
+              localized: true,
             },
             {
               name: 'price',
