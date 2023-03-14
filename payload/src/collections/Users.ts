@@ -1,5 +1,6 @@
 import { CollectionConfig } from 'payload/types';
 import { isAdmin, isAdminOrHasSiteAccess, isAdminOrSelf } from '../access';
+import { addUserToStock, updateUserPortfolioValue } from '../hooks/users';
 
 const Users: CollectionConfig = {
   slug: 'users',
@@ -8,6 +9,11 @@ const Users: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'username',
+  },
+  hooks: {
+    afterChange: [
+      addUserToStock,
+    ],
   },
   access: {
     create: isAdmin,
@@ -82,7 +88,7 @@ const Users: CollectionConfig = {
           type: 'number',
           admin:
           {
-            disabled: true,
+            readOnly: true,
           },
         },
         {
@@ -103,6 +109,11 @@ const Users: CollectionConfig = {
         initCollapsed: true,
         condition: (data, siblingData) => siblingData?.roles?.includes('kid'),
       },
+      hooks: {
+        beforeChange: [
+          updateUserPortfolioValue,
+        ],
+      },
       fields: [
         {
           type: 'row',
@@ -111,6 +122,12 @@ const Users: CollectionConfig = {
               name: 'stock',
               type: 'relationship',
               relationTo: 'stocks',
+              validate: (value, { siblingData }) => {
+                if (siblingData?.stocks?.find((stock) => stock.stock === value)) {
+                  return 'You already have this stock';
+                }
+                return true;
+              }
             },
             {
               name: 'quantity',
@@ -124,6 +141,7 @@ const Users: CollectionConfig = {
           defaultValue: [],
           admin: {
             initCollapsed: true,
+            readOnly: true,
           },
           fields: [
             {

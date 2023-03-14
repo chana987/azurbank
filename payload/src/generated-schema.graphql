@@ -19,6 +19,7 @@ type Dividend {
   createdAt: DateTime!
   updatedAt: DateTime!
   stock: Stock!
+  name: String
   quarter: String
   dividend: Float!
   date: DateTime!
@@ -45,7 +46,8 @@ type Stock {
   capital: Float
   latestPrice: Float
   historicPrices: [Stock_HistoricPrices!]
-  dividends: [Stock_Dividends!]
+  dividends: [Dividend!]
+  users: [User!]
 }
 
 type Stock_HistoricPrices {
@@ -54,9 +56,66 @@ type Stock_HistoricPrices {
   id: String
 }
 
-type Stock_Dividends {
-  dividend: Dividend
+type User {
   id: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  username: String!
+  lastName: String
+  roles: [User_roles!]!
+  accountId: String
+  birthday: DateTime
+  portfolioValue: Float
+  balance: Float
+  stocks: [User_Stocks!]
+  transactions: [User_Transactions!]
+  email: String
+  resetPasswordToken: String
+  resetPasswordExpiration: DateTime
+  loginAttempts: Float
+  lockUntil: DateTime
+  password: String!
+}
+
+enum User_roles {
+  admin
+  kid
+}
+
+type User_Stocks {
+  stock: Stock
+  quantity: Float
+  dividends: [User_Stocks_Dividends!]
+  id: String
+}
+
+type User_Stocks_Dividends {
+  dividend: Dividend
+  quantity: Float
+  id: String
+}
+
+type User_Transactions {
+  type: User_Transactions_type
+  status: User_Transactions_status
+  sum: Float
+  date: DateTime
+  stock: Stock
+  quantity: Float
+  price: Float
+  id: String
+}
+
+enum User_Transactions_type {
+  buy
+  sell
+  deposit
+  withdrawal
+}
+
+enum User_Transactions_status {
+  pending
+  completed
 }
 
 type Dividends {
@@ -75,6 +134,7 @@ type Dividends {
 
 input Dividend_where {
   stock: Dividend_stock_operator
+  name: Dividend_name_operator
   quarter: Dividend_quarter_operator
   dividend: Dividend_dividend_operator
   date: Dividend_date_operator
@@ -92,6 +152,17 @@ input Dividend_stock_operator {
   in: [String]
   not_in: [String]
   all: [String]
+}
+
+input Dividend_name_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
 }
 
 input Dividend_quarter_operator {
@@ -173,6 +244,7 @@ input Dividend_updatedAt_operator {
 
 input Dividend_where_or {
   stock: Dividend_stock_operator
+  name: Dividend_name_operator
   quarter: Dividend_quarter_operator
   dividend: Dividend_dividend_operator
   date: Dividend_date_operator
@@ -184,6 +256,7 @@ input Dividend_where_or {
 
 input Dividend_where_and {
   stock: Dividend_stock_operator
+  name: Dividend_name_operator
   quarter: Dividend_quarter_operator
   dividend: Dividend_dividend_operator
   date: Dividend_date_operator
@@ -203,6 +276,7 @@ type dividendsDocAccess {
 
 type DividendsDocAccessFields {
   stock: DividendsDocAccessFields_stock
+  name: DividendsDocAccessFields_name
   quarter: DividendsDocAccessFields_quarter
   dividend: DividendsDocAccessFields_dividend
   date: DividendsDocAccessFields_date
@@ -229,6 +303,29 @@ type DividendsDocAccessFields_stock_Update {
 }
 
 type DividendsDocAccessFields_stock_Delete {
+  permission: Boolean!
+}
+
+type DividendsDocAccessFields_name {
+  create: DividendsDocAccessFields_name_Create
+  read: DividendsDocAccessFields_name_Read
+  update: DividendsDocAccessFields_name_Update
+  delete: DividendsDocAccessFields_name_Delete
+}
+
+type DividendsDocAccessFields_name_Create {
+  permission: Boolean!
+}
+
+type DividendsDocAccessFields_name_Read {
+  permission: Boolean!
+}
+
+type DividendsDocAccessFields_name_Update {
+  permission: Boolean!
+}
+
+type DividendsDocAccessFields_name_Delete {
   permission: Boolean!
 }
 
@@ -377,8 +474,8 @@ input Stock_where {
   date: Stock_date_operator
   price: Stock_price_operator
   historicPrices__id: Stock_historicPrices__id_operator
-  dividends__dividend: Stock_dividends__dividend_operator
-  dividends__id: Stock_dividends__id_operator
+  dividends: Stock_dividends_operator
+  users: Stock_users_operator
   id: Stock_id_operator
   createdAt: Stock_createdAt_operator
   updatedAt: Stock_updatedAt_operator
@@ -518,7 +615,7 @@ input Stock_historicPrices__id_operator {
   exists: Boolean
 }
 
-input Stock_dividends__dividend_operator {
+input Stock_dividends_operator {
   equals: String
   not_equals: String
   in: [String]
@@ -527,11 +624,9 @@ input Stock_dividends__dividend_operator {
   exists: Boolean
 }
 
-input Stock_dividends__id_operator {
+input Stock_users_operator {
   equals: String
   not_equals: String
-  like: String
-  contains: String
   in: [String]
   not_in: [String]
   all: [String]
@@ -583,8 +678,8 @@ input Stock_where_or {
   date: Stock_date_operator
   price: Stock_price_operator
   historicPrices__id: Stock_historicPrices__id_operator
-  dividends__dividend: Stock_dividends__dividend_operator
-  dividends__id: Stock_dividends__id_operator
+  dividends: Stock_dividends_operator
+  users: Stock_users_operator
   id: Stock_id_operator
   createdAt: Stock_createdAt_operator
   updatedAt: Stock_updatedAt_operator
@@ -604,8 +699,8 @@ input Stock_where_and {
   date: Stock_date_operator
   price: Stock_price_operator
   historicPrices__id: Stock_historicPrices__id_operator
-  dividends__dividend: Stock_dividends__dividend_operator
-  dividends__id: Stock_dividends__id_operator
+  dividends: Stock_dividends_operator
+  users: Stock_users_operator
   id: Stock_id_operator
   createdAt: Stock_createdAt_operator
   updatedAt: Stock_updatedAt_operator
@@ -632,6 +727,7 @@ type StocksDocAccessFields {
   latestPrice: StocksDocAccessFields_latestPrice
   historicPrices: StocksDocAccessFields_historicPrices
   dividends: StocksDocAccessFields_dividends
+  users: StocksDocAccessFields_users
 }
 
 type StocksDocAccessFields_name {
@@ -968,7 +1064,6 @@ type StocksDocAccessFields_dividends {
   read: StocksDocAccessFields_dividends_Read
   update: StocksDocAccessFields_dividends_Update
   delete: StocksDocAccessFields_dividends_Delete
-  fields: StocksDocAccessFields_dividends_Fields
 }
 
 type StocksDocAccessFields_dividends_Create {
@@ -987,54 +1082,26 @@ type StocksDocAccessFields_dividends_Delete {
   permission: Boolean!
 }
 
-type StocksDocAccessFields_dividends_Fields {
-  dividend: StocksDocAccessFields_dividends_dividend
-  id: StocksDocAccessFields_dividends_id
+type StocksDocAccessFields_users {
+  create: StocksDocAccessFields_users_Create
+  read: StocksDocAccessFields_users_Read
+  update: StocksDocAccessFields_users_Update
+  delete: StocksDocAccessFields_users_Delete
 }
 
-type StocksDocAccessFields_dividends_dividend {
-  create: StocksDocAccessFields_dividends_dividend_Create
-  read: StocksDocAccessFields_dividends_dividend_Read
-  update: StocksDocAccessFields_dividends_dividend_Update
-  delete: StocksDocAccessFields_dividends_dividend_Delete
-}
-
-type StocksDocAccessFields_dividends_dividend_Create {
+type StocksDocAccessFields_users_Create {
   permission: Boolean!
 }
 
-type StocksDocAccessFields_dividends_dividend_Read {
+type StocksDocAccessFields_users_Read {
   permission: Boolean!
 }
 
-type StocksDocAccessFields_dividends_dividend_Update {
+type StocksDocAccessFields_users_Update {
   permission: Boolean!
 }
 
-type StocksDocAccessFields_dividends_dividend_Delete {
-  permission: Boolean!
-}
-
-type StocksDocAccessFields_dividends_id {
-  create: StocksDocAccessFields_dividends_id_Create
-  read: StocksDocAccessFields_dividends_id_Read
-  update: StocksDocAccessFields_dividends_id_Update
-  delete: StocksDocAccessFields_dividends_id_Delete
-}
-
-type StocksDocAccessFields_dividends_id_Create {
-  permission: Boolean!
-}
-
-type StocksDocAccessFields_dividends_id_Read {
-  permission: Boolean!
-}
-
-type StocksDocAccessFields_dividends_id_Update {
-  permission: Boolean!
-}
-
-type StocksDocAccessFields_dividends_id_Delete {
+type StocksDocAccessFields_users_Delete {
   permission: Boolean!
 }
 
@@ -1056,68 +1123,6 @@ type StocksUpdateDocAccess {
 type StocksDeleteDocAccess {
   permission: Boolean!
   where: JSONObject
-}
-
-type User {
-  id: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  username: String!
-  lastName: String
-  roles: [User_roles!]!
-  accountId: String
-  birthday: DateTime
-  portfolioValue: Float
-  balance: Float
-  stocks: [User_Stocks!]
-  transactions: [User_Transactions!]
-  email: String
-  resetPasswordToken: String
-  resetPasswordExpiration: DateTime
-  loginAttempts: Float
-  lockUntil: DateTime
-  password: String!
-}
-
-enum User_roles {
-  admin
-  kid
-}
-
-type User_Stocks {
-  stock: Stock
-  quantity: Float
-  dividends: [User_Stocks_Dividends!]
-  id: String
-}
-
-type User_Stocks_Dividends {
-  dividend: Dividend
-  quantity: Float
-  id: String
-}
-
-type User_Transactions {
-  type: User_Transactions_type
-  status: User_Transactions_status
-  sum: Float
-  date: DateTime
-  stock: Stock
-  quantity: Float
-  price: Float
-  id: String
-}
-
-enum User_Transactions_type {
-  buy
-  sell
-  deposit
-  withdrawal
-}
-
-enum User_Transactions_status {
-  pending
-  completed
 }
 
 type Users {
@@ -2152,6 +2157,7 @@ type dividendsAccess {
 
 type DividendsFields {
   stock: DividendsFields_stock
+  name: DividendsFields_name
   quarter: DividendsFields_quarter
   dividend: DividendsFields_dividend
   date: DividendsFields_date
@@ -2178,6 +2184,29 @@ type DividendsFields_stock_Update {
 }
 
 type DividendsFields_stock_Delete {
+  permission: Boolean!
+}
+
+type DividendsFields_name {
+  create: DividendsFields_name_Create
+  read: DividendsFields_name_Read
+  update: DividendsFields_name_Update
+  delete: DividendsFields_name_Delete
+}
+
+type DividendsFields_name_Create {
+  permission: Boolean!
+}
+
+type DividendsFields_name_Read {
+  permission: Boolean!
+}
+
+type DividendsFields_name_Update {
+  permission: Boolean!
+}
+
+type DividendsFields_name_Delete {
   permission: Boolean!
 }
 
@@ -2314,6 +2343,7 @@ type StocksFields {
   latestPrice: StocksFields_latestPrice
   historicPrices: StocksFields_historicPrices
   dividends: StocksFields_dividends
+  users: StocksFields_users
 }
 
 type StocksFields_name {
@@ -2650,7 +2680,6 @@ type StocksFields_dividends {
   read: StocksFields_dividends_Read
   update: StocksFields_dividends_Update
   delete: StocksFields_dividends_Delete
-  fields: StocksFields_dividends_Fields
 }
 
 type StocksFields_dividends_Create {
@@ -2669,54 +2698,26 @@ type StocksFields_dividends_Delete {
   permission: Boolean!
 }
 
-type StocksFields_dividends_Fields {
-  dividend: StocksFields_dividends_dividend
-  id: StocksFields_dividends_id
+type StocksFields_users {
+  create: StocksFields_users_Create
+  read: StocksFields_users_Read
+  update: StocksFields_users_Update
+  delete: StocksFields_users_Delete
 }
 
-type StocksFields_dividends_dividend {
-  create: StocksFields_dividends_dividend_Create
-  read: StocksFields_dividends_dividend_Read
-  update: StocksFields_dividends_dividend_Update
-  delete: StocksFields_dividends_dividend_Delete
-}
-
-type StocksFields_dividends_dividend_Create {
+type StocksFields_users_Create {
   permission: Boolean!
 }
 
-type StocksFields_dividends_dividend_Read {
+type StocksFields_users_Read {
   permission: Boolean!
 }
 
-type StocksFields_dividends_dividend_Update {
+type StocksFields_users_Update {
   permission: Boolean!
 }
 
-type StocksFields_dividends_dividend_Delete {
-  permission: Boolean!
-}
-
-type StocksFields_dividends_id {
-  create: StocksFields_dividends_id_Create
-  read: StocksFields_dividends_id_Read
-  update: StocksFields_dividends_id_Update
-  delete: StocksFields_dividends_id_Delete
-}
-
-type StocksFields_dividends_id_Create {
-  permission: Boolean!
-}
-
-type StocksFields_dividends_id_Read {
-  permission: Boolean!
-}
-
-type StocksFields_dividends_id_Update {
-  permission: Boolean!
-}
-
-type StocksFields_dividends_id_Delete {
+type StocksFields_users_Delete {
   permission: Boolean!
 }
 
@@ -3436,6 +3437,7 @@ type Mutation {
 
 input mutationDividendInput {
   stock: String
+  name: String
   quarter: String
   dividend: Float!
   date: String!
@@ -3444,6 +3446,7 @@ input mutationDividendInput {
 
 input mutationDividendUpdateInput {
   stock: String
+  name: String
   quarter: String
   dividend: Float
   date: String
@@ -3462,17 +3465,13 @@ input mutationStockInput {
   capital: Float
   latestPrice: Float
   historicPrices: [mutationStock_HistoricPricesInput]
-  dividends: [mutationStock_DividendsInput]
+  dividends: [String]
+  users: [String]
 }
 
 input mutationStock_HistoricPricesInput {
   date: String
   price: Float!
-  id: String
-}
-
-input mutationStock_DividendsInput {
-  dividend: String
   id: String
 }
 
@@ -3488,17 +3487,13 @@ input mutationStockUpdateInput {
   capital: Float
   latestPrice: Float
   historicPrices: [mutationStockUpdate_HistoricPricesInput]
-  dividends: [mutationStockUpdate_DividendsInput]
+  dividends: [String]
+  users: [String]
 }
 
 input mutationStockUpdate_HistoricPricesInput {
   date: String
   price: Float!
-  id: String
-}
-
-input mutationStockUpdate_DividendsInput {
-  dividend: String
   id: String
 }
 

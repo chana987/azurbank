@@ -44,7 +44,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 20460.00,
         },
       ],
-      dividends: [],
     },
   });
 
@@ -66,7 +65,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 2029.00,
         },
       ],
-      dividends: [],
     },
   });
 
@@ -88,7 +86,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 3635.00,
         },
       ],
-      dividends: [],
     },
   });
 
@@ -110,7 +107,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 436.4,
         },
       ],
-      dividends: [],
     },
   });
 
@@ -198,7 +194,7 @@ export const seed = async (payload: Payload): Promise<void> => {
       date: '2023-03-09',
       dividend: 100,
       quarter: 'Q1',
-      stock: stock1.id,
+      stock: stock2.id,
     },
   });
 };

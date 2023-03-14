@@ -16,6 +16,7 @@ export interface Config {
 export interface Dividend {
   id: string;
   stock: string | Stock;
+  name?: string;
   quarter?: string;
   dividend: number;
   date: string;
@@ -40,10 +41,8 @@ export interface Stock {
     price: number;
     id?: string;
   }[];
-  dividends: {
-    dividend?: string | Dividend;
-    id?: string;
-  }[];
+  dividends?: string[] | Dividend[];
+  users?: string[] | User[];
   createdAt: string;
   updatedAt: string;
 }

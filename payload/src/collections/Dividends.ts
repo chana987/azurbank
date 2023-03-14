@@ -1,6 +1,6 @@
 import { CollectionConfig } from 'payload/types';
 import { isAdmin } from '../access';
-import { addDividendsToUsers } from '../hooks/collections';
+import { addDividendToStock, getDividendName } from '../hooks/dividends';
 
 const Dividends: CollectionConfig = {
   slug: 'dividends',
@@ -12,8 +12,11 @@ const Dividends: CollectionConfig = {
     read: () => true,
   },
   hooks: {
+    beforeValidate: [
+      getDividendName,
+    ],
     afterChange: [
-      addDividendsToUsers,
+      addDividendToStock,
     ],
   },
   fields: [
@@ -22,6 +25,10 @@ const Dividends: CollectionConfig = {
       type: 'relationship',
       relationTo: 'stocks',
       required: true,
+    },
+    {
+      name: 'name',
+      type: 'text',
     },
     {
       type: 'row',

@@ -1,6 +1,12 @@
 import { CollectionConfig } from 'payload/types';
 import { isAdmin } from '../access';
-import { setLatestPrice, sortPricesByDate } from '../hooks/collections';
+import {
+  setLatestPrice,
+  sortPricesByDate,
+  addDividendToUsers,
+  updateLatestPrice,
+  updateUserPortfolioValuess
+} from '../hooks/stocks';
 
 const Stocks: CollectionConfig = {
   slug: 'stocks',
@@ -12,8 +18,7 @@ const Stocks: CollectionConfig = {
     read: () => true,
   },
   hooks: {
-    afterChange: [
-      sortPricesByDate,
+    beforeChange: [
       setLatestPrice,
     ],
   },
@@ -85,6 +90,13 @@ const Stocks: CollectionConfig = {
       admin: {
         initCollapsed: true,
       },
+      hooks: {
+        afterChange: [
+          sortPricesByDate,
+          // updateLatestPrice,
+          updateUserPortfolioValuess,
+        ],
+      },
       defaultValue: [],
       fields: [
         {
@@ -107,19 +119,29 @@ const Stocks: CollectionConfig = {
     },
     {
       name: 'dividends',
-      type: 'array',
+      type: 'relationship',
+      relationTo: 'dividends',
       admin: {
-        initCollapsed: true,
+        readOnly: true,
       },
-      defaultValue: [],
-      fields: [
-        {
-          name: 'dividend',
-          type: 'relationship',
-          relationTo: 'dividends',
-        },
-      ],
-    }
+      hasMany: true,
+      defaultValue: () => [],
+      hooks: {
+        afterChange: [
+          addDividendToUsers,
+        ],
+      },
+    },
+    {
+      name: 'users',
+      type: 'relationship',
+      relationTo: 'users',
+      admin: {
+        readOnly: true,
+      },
+      hasMany: true,
+      defaultValue: () => [],
+    },
   ],
 };
 
