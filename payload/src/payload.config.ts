@@ -21,10 +21,6 @@ export default buildConfig({
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
-  localization: {
-    defaultLocale: 'he',
-    locales: ['he', 'en'],
-  },
   onInit: async (payload) => {
     // If the `env` var `PAYLOAD_SEED` is set, seed the db
     if (process.env.PAYLOAD_SEED) {

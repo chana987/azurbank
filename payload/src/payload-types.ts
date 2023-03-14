@@ -16,6 +16,7 @@ export interface Config {
 export interface Dividend {
   id: string;
   stock: string | Stock;
+  name?: string;
   quarter?: string;
   dividend: number;
   date: string;
@@ -34,15 +35,14 @@ export interface Stock {
   PE?: number;
   DPR?: number;
   capital?: number;
+  latestPrice?: number;
   historicPrices: {
     date: string;
     price: number;
     id?: string;
   }[];
-  dividends: {
-    dividend?: string | Dividend;
-    id?: string;
-  }[];
+  dividends?: string[] | Dividend[];
+  users?: string[] | User[];
   createdAt: string;
   updatedAt: string;
 }
@@ -51,32 +51,30 @@ export interface User {
   username: string;
   lastName?: string;
   roles: ('admin' | 'kid')[];
-  userDetails: {
-    accountId?: string;
-    birthday?: string;
-    portfolioValue?: number;
-    balance?: number;
-    stocks: {
-      stock?: string | Stock;
-      quantity?: number;
-      id?: string;
-    }[];
-    transactions: {
-      type: 'buy' | 'sell' | 'deposit' | 'withdrawal';
-      status?: 'pending' | 'completed';
-      sum: number;
-      date: string;
-      stock?: string | Stock;
-      quantity?: number;
-      price?: number;
-      id?: string;
-    }[];
+  accountId?: string;
+  birthday?: string;
+  portfolioValue?: number;
+  balance?: number;
+  stocks: {
+    stock?: string | Stock;
+    quantity?: number;
     dividends: {
       dividend?: string | Dividend;
       quantity?: number;
       id?: string;
     }[];
-  };
+    id?: string;
+  }[];
+  transactions: {
+    type: 'buy' | 'sell' | 'deposit' | 'withdrawal';
+    status?: 'pending' | 'completed';
+    sum: number;
+    date: string;
+    stock?: string | Stock;
+    quantity?: number;
+    price?: number;
+    id?: string;
+  }[];
   email?: string;
   resetPasswordToken?: string;
   resetPasswordExpiration?: string;

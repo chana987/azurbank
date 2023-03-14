@@ -11,16 +11,12 @@ export const seed = async (payload: Payload): Promise<void> => {
       lastName: 'Admin',
       email: 'chana@azurbnk.com',
       password: '12345678',
-      roles: ['admin'],
-      userDetails: {
-        accountId: 'admin',
-        stocks: [],
-        transactions: [],
-        dividends: [],
-      },
+      roles: [ 'admin' ],
+      stocks: [],
+      transactions: [],
     }
   });
-  
+
   // login as admin
   await payload.login({
     collection: 'users',
@@ -48,7 +44,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 20460.00,
         },
       ],
-      dividends: [],
     },
   });
 
@@ -70,7 +65,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 2029.00,
         },
       ],
-      dividends: [],
     },
   });
 
@@ -92,7 +86,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 3635.00,
         },
       ],
-      dividends: [],
     },
   });
 
@@ -114,7 +107,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           price: 436.4,
         },
       ],
-      dividends: [],
     },
   });
 
@@ -126,22 +118,20 @@ export const seed = async (payload: Payload): Promise<void> => {
       lastName: 'מאייר',
       email: 'YSRL@azurbnk.com',
       password: '12345678',
-      roles: [ 'kid' ],
-      userDetails: {
-        accountId: 'YSRL',
-        stocks: [
-          {
-            quantity: 1.5,
-            stock: stock2.id,
-          },
-          {
-            quantity: 2,
-            stock: stock4.id,
-          },
-        ],
-        transactions: [],
-        dividends: [],
-      },
+      roles: [ 'kid' ], accountId: 'YSRL',
+      stocks: [
+        {
+          quantity: 1.5,
+          stock: stock2.id,
+          dividends: [],
+        },
+        {
+          quantity: 2,
+          stock: stock4.id,
+          dividends: [],
+        },
+      ],
+      transactions: [],
     },
   });
 
@@ -154,21 +144,20 @@ export const seed = async (payload: Payload): Promise<void> => {
       email: 'GFN@azurbnk.com',
       password: '12345678',
       roles: [ 'kid' ],
-      userDetails: {
-        accountId: 'GFN',
-        stocks: [
-          {
-            quantity: 1,
-            stock: stock2.id,
-          },
-          {
-            quantity: 0.333,
-            stock: stock3.id,
-          },
-        ],
-        transactions: [],
-        dividends: [],
-      },
+      accountId: 'GFN',
+      stocks: [
+        {
+          quantity: 1,
+          stock: stock2.id,
+          dividends: [],
+        },
+        {
+          quantity: 0.333,
+          stock: stock3.id,
+          dividends: [],
+        },
+      ],
+      transactions: [],
     },
   });
 
@@ -181,21 +170,31 @@ export const seed = async (payload: Payload): Promise<void> => {
       email: 'HDS@azurbnk.com',
       password: '12345678',
       roles: [ 'kid' ],
-      userDetails: {
-        accountId: 'HDS',
-        stocks: [
-          {
-            quantity: 1,
-            stock: stock2.id,
-          },
-          {
-            quantity: 0.04,
-            stock: stock1.id,
-          },
-        ],
-        transactions: [],
-        dividends: [],
-      },
+      accountId: 'HDS',
+      stocks: [
+        {
+          quantity: 1,
+          stock: stock2.id,
+          dividends: [],
+        },
+        {
+          quantity: 0.04,
+          stock: stock1.id,
+          dividends: [],
+        },
+      ],
+      transactions: [],
+    },
+  });
+
+  // create a dividend
+  const dividend1 = await payload.create({
+    collection: 'dividends',
+    data: {
+      date: '2023-03-09',
+      dividend: 100,
+      quarter: 'Q1',
+      stock: stock2.id,
     },
   });
 };
