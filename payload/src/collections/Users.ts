@@ -1,5 +1,5 @@
 import { CollectionConfig } from 'payload/types';
-import { isAdmin, isAdminOrHasSiteAccess, isAdminOrSelf } from '../access';
+import { isAdmin } from '../access';
 import { addUserToStock, updateUserPortfolioValue } from '../hooks/users';
 import { isKid } from '../utils';
 
@@ -18,9 +18,7 @@ const Users: CollectionConfig = {
   },
   access: {
     create: isAdmin,
-    read: isAdminOrHasSiteAccess(),
-    update: isAdminOrSelf,
-    delete: isAdmin,
+    read: () => true,
   },
   fields: [
     {
