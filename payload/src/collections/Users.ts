@@ -1,6 +1,7 @@
 import { CollectionConfig } from 'payload/types';
 import { isAdmin, isAdminOrHasSiteAccess, isAdminOrSelf } from '../access';
 import { addUserToStock, updateUserPortfolioValue } from '../hooks/users';
+import { isKid } from '../utils';
 
 const Users: CollectionConfig = {
   slug: 'users',
@@ -69,7 +70,6 @@ const Users: CollectionConfig = {
         {
           name: 'accountId',
           type: 'text',
-          unique: true,
         },
         {
           name: 'birthday',
@@ -77,7 +77,7 @@ const Users: CollectionConfig = {
         },
       ],
       admin: {
-        condition: (data, siblingData) => siblingData?.roles?.includes('kid'),
+        condition: (siblingData) => isKid(siblingData),
       },
     },
     {
@@ -98,7 +98,7 @@ const Users: CollectionConfig = {
         },
       ],
       admin: {
-        condition: (data, siblingData) => siblingData?.roles?.includes('kid'),
+        condition: (siblingData) => isKid(siblingData),
       },
     },
     {
@@ -107,7 +107,7 @@ const Users: CollectionConfig = {
       defaultValue: [],
       admin: {
         initCollapsed: true,
-        condition: (data, siblingData) => siblingData?.roles?.includes('kid'),
+        condition: (siblingData) => isKid(siblingData),
       },
       hooks: {
         beforeChange: [
@@ -168,7 +168,7 @@ const Users: CollectionConfig = {
       defaultValue: [],
       admin: {
         initCollapsed: true,
-        condition: (data, siblingData) => siblingData?.roles?.includes('kid'),
+        condition: (siblingData) => isKid(siblingData),
       },
       fields: [
         {

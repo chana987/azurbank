@@ -15,6 +15,9 @@ const start = async () => {
     secret: process.env.PAYLOAD_SECRET,
     mongoURL: process.env.MONGODB_URI,
     express: app,
+    loggerOptions: {
+      prettyPrint: true,
+    },
     onInit: async () => {
       payload.logger.info(`Payload Admin URL: ${payload.getAdminURL()}`);
     },
