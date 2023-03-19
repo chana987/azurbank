@@ -93,7 +93,7 @@ const Stocks: CollectionConfig = {
       hooks: {
         afterChange: [
           sortPricesByDate,
-          // updateLatestPrice,
+          updateLatestPrice,
           updateUserPortfolioValuess,
         ],
       },

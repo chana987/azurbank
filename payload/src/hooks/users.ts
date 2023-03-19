@@ -1,4 +1,4 @@
-import { FieldHook, CollectionAfterChangeHook } from 'payload/types';
+import { FieldHook, CollectionAfterChangeHook, CollectionBeforeChangeHook } from 'payload/types';
 import payload from 'payload';
 import { calculatePortfolioValue } from '../utils';
 
@@ -27,4 +27,4 @@ export const addUserToStock: CollectionAfterChangeHook = async ({ operation, doc
 
 export const updateUserPortfolioValue: FieldHook = async ({ data }) => {
   data.portfolioValue = await calculatePortfolioValue(data);
-}
+};
