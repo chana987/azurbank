@@ -21,3 +21,7 @@ export const calculatePortfolioValue = async (user: any) => {
   }
   return portfolioValue;
 };
+
+export const isKid = (siblingData) => {
+  return siblingData?.roles?.includes('kid');
+}
