@@ -4,8 +4,7 @@ import {
   setLatestPrice,
   sortPricesByDate,
   addDividendToUsers,
-  updateLatestPrice,
-  updateUserPortfolioValuess
+  updateUserPortfolioValues
 } from '../hooks/stocks';
 
 const Stocks: CollectionConfig = {
@@ -16,11 +15,6 @@ const Stocks: CollectionConfig = {
   access: {
     create: isAdmin,
     read: () => true,
-  },
-  hooks: {
-    beforeChange: [
-      setLatestPrice,
-    ],
   },
   fields: [
     {
@@ -91,10 +85,10 @@ const Stocks: CollectionConfig = {
         initCollapsed: true,
       },
       hooks: {
-        afterChange: [
+        beforeChange: [
           sortPricesByDate,
-          updateLatestPrice,
-          updateUserPortfolioValuess,
+          setLatestPrice,
+          updateUserPortfolioValues,
         ],
       },
       defaultValue: [],

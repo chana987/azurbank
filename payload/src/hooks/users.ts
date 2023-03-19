@@ -22,7 +22,6 @@ export const addUserToStock: CollectionAfterChangeHook = async ({ operation, doc
       });
     }
   }
-  return doc;
 };
 
 export const updateUserPortfolioValue: FieldHook = async ({ data }) => {
