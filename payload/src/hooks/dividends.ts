@@ -20,12 +20,10 @@ export const addDividendToStock: CollectionAfterChangeHook = async ({ operation,
       }
     });
   }
-  return doc;
 };
 
 export const getDividendName: CollectionBeforeChangeHook = async ({ operation, data }) => {
   if (operation === 'create' || operation === 'update') {
     data.name = `${data.date?.slice(0, 4) || ''} ${data.quarter || ''} ${data.stock?.name || ''}`;
-    return data;
   }
 };

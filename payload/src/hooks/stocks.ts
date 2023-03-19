@@ -3,31 +3,10 @@ import payload from 'payload';
 import { calculatePortfolioValue } from '../utils';
 
 
-export const setLatestPrice: CollectionBeforeChangeHook = async ({ operation, data }) => {
-  if (operation === 'create') {
-    const historicPrices = data.historicPrices;
-    const latestPrice = historicPrices.length > 0 ? historicPrices[ historicPrices.length - 1 ].price : null;
-    data.latestPrice = latestPrice;
-  }
-  return data;
-};
-
-export const updateLatestPrice: FieldHook = async ({ operation, data, previousDoc }) => {
-  if (operation === 'update') {
-    const historicPrices = data.historicPrices;
-    const latestPrice = historicPrices.length > 0 ? historicPrices[ historicPrices.length - 1 ].price : null;
-
-    if (previousDoc && (latestPrice !== previousDoc?.latestPrice)) {
-      await payload.update({
-        collection: 'stocks',
-        id: previousDoc?.id,
-        data: {
-          latestPrice,
-        },
-      });
-    }
-  }
-  return data;
+export const setLatestPrice: FieldHook = async ({ operation, data, previousDoc }) => {
+  const historicPrices = data.historicPrices;
+  const latestPrice = historicPrices.length > 0 ? historicPrices[ historicPrices.length - 1 ].price : null;
+  data.latestPrice = latestPrice;
 };
 
 export const sortPricesByDate: FieldHook = async ({ operation, data }) => {
@@ -38,19 +17,15 @@ export const sortPricesByDate: FieldHook = async ({ operation, data }) => {
     });
     data.historicPrices = sortedPrices || [];
   }
-  return data;
 };
 
-export const updateUserPortfolioValuess: FieldHook = async ({ operation, data }) => {
-  if (operation === 'update' || operation === 'create') {
-    const stockId = data.id;
-    if (!stockId) return data;
-    
+export const updateUserPortfolioValues: FieldHook = async ({ operation, data }) => {
+  if (operation === 'update') {
     const users = await payload.find({
       collection: 'users',
       where: {
         'stocks.stock': {
-          equals: stockId,
+          equals: data.id,
         }
       },
     });
@@ -67,7 +42,6 @@ export const updateUserPortfolioValuess: FieldHook = async ({ operation, data })
       });
     }
   }
-  return data;
 };
 
 export const addDividendToUsers: FieldHook = async ({ operation, data }) => {
@@ -112,5 +86,4 @@ export const addDividendToUsers: FieldHook = async ({ operation, data }) => {
       });
     }
   }
-  return data;
 };
