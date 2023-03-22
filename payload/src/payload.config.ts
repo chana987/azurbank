@@ -7,6 +7,7 @@ import Dividends from './collections/Dividends';
 
 export default buildConfig({
   serverURL: process.env.SERVER_URL,
+  cors: ['http://localhost:3030'],
   admin: {
     user: Users.slug,
   },

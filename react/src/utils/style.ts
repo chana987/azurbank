@@ -68,6 +68,19 @@ export const theme = createTheme({
 				}),
 			},
 		},
+		MuiInput: {
+			styleOverrides: {
+				root: ({ theme }: any) => ({
+					color: theme.palette.grey[50],
+					'&::before': {
+						borderBottom: `1px solid ${theme.palette.grey[50]}`,
+					},
+					'&:hover:not(.Mui-disabled):before': {
+						borderBottom: `2px solid ${theme.palette.grey[50]}`,
+					},
+				}),
+			},
+		},
 		MuiPaper: {
 			variants: [
 				{

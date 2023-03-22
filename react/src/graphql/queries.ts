@@ -1,133 +1,90 @@
 import { gql } from '@apollo/client';
+import './types.ts';
 
-export const GET_ALL_STOCKS = gql`
-  query Stocks {
-    Stocks(sort: "hebrewName") {
-      data {
+export const STOCK = gql`
+  query Stock($id: String!) {
+    Stock(id: $id) {
+      id
+      hebrewName
+      symbol
+      latestPrice
+      PE
+      DPR
+      capital
+      historicPrices {
         id
-        attributes {
-          companyName
-          currency
-          dividends {
-            id
-            date
-            percentage
-            sum
-            xDate
-          }
-          DPR
-          hebrewName
-          historicPrices {
-            id
-            date
-            stockPrice
-          }
-          isin
-          issuerId
-          marketValue
-          PE
-          securityId
-          symbol
-        }
+        date
+        price
       }
-    }
-  }
-`;
-
-export const GET_ALL_USERS = gql`
-  query Users{
-    Users {
-      docs {
+      dividends {
+        id
+        date
+        quarter
+        dividend
+      }
+      users {
+        id
         username
         lastName
-        id
-        email
       }
     }
   }
 `;
 
-export const GET_USER = gql`
-  query user($id: ID!) {
-    usersPermissionsUser(id: $id) {
-      data {
+export const STOCKS = gql`
+  query Stocks {
+    Stocks {
+      docs{
         id
-        attributes {
-          actions {
-            amount
-            date
-            status
-            stock {
-              data {
-                id
-                attributes {
-                  companyName
-                  hebrewName
-                  historicPrices {
-                    id
-                    date
-                    stockPrice
-                  }
-                  symbol
-                }
-              }
-            }
-            stockPrice
-            type
-          }
-          balance
-          birthday
-          createdAt
-          email
-          username
-          gender
-          joinDate
-          lastName
-          role {
-            data {
-              attributes {
-                name
-              }
-            }
-          }
-          stocks {
-            amount
-            stock {
-              data {
-                id
-                attributes {
-                  companyName
-                  hebrewName
-                  historicPrices {
-                    id
-                    date
-                    stockPrice
-                  }
-                  symbol
-                }
-              }
-            }
-          }
-          username
-        }
+        hebrewName
+        symbol
+        latestPrice
+        capital
       }
+      totalDocs
     }
   }
 `;
 
-export const ME = gql`
-  query me {
-    me {
+export const USER = gql`
+  query User($id: String!) {
+    User(id: $id) {
       id
       username
+      lastName
+      roles
       email
-      role {
-        data {
-          attributes {
-            name
-          }
+      accountId
+      birthday
+      portfolioValue
+      balance
+      stocks {
+        id
+        quantity
+        stock {
+          id
+          hebrewName
+          symbol
+          latestPrice
+          capital
         }
       }
+    }
+  }
+`;
+
+export const USERS = gql`
+  query Users {
+    Users {
+      docs {
+        id
+        username
+        lastName
+        roles
+        accountId
+        portfolioValue
+      }
+      totalDocs
     }
   }
 `;
