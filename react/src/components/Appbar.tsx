@@ -14,10 +14,13 @@ import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Input from '@mui/material/Input';
 import Grid from '@mui/material/Grid';
+import { UsersContext } from 'context/users';
 
 const Appbar = () => {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+	const { user } = React.useContext(UsersContext);
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -104,7 +107,7 @@ const Appbar = () => {
 							textDecoration: 'none',
 						}}
 					>
-            LOGO
+            עזורבנק
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 					</Box>
@@ -120,9 +123,9 @@ const Appbar = () => {
 						</Grid>
 					</Box>
 					<Box sx={{ flexGrow: 0, paddingRight: '.5rem' }}>
-						<Tooltip title="Open settings">
+						<Tooltip title="הגדרות">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-								<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+								<Avatar alt={user?.username || 'אורח'} src="/static/images/avatar/2.jpg" />
 							</IconButton>
 						</Tooltip>
 						<Menu

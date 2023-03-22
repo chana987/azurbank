@@ -1,67 +1,90 @@
-import { gql } from '__generated__/gql';
-import { CORE_STOCK_FRAGS, CORE_USER_FRAGS } from './fragments';
+import { gql } from '@apollo/client';
+import './types.ts';
 
-export const STOCKS = gql(/* GraphQL */ `
-  ${CORE_STOCK_FRAGS}
-  query Stocks {
-    Stocks(sort: "hebrewName") {
-      ...CoreStockFields
-    }
-  }
-`);
-
-export const GET_ALL_STOCKS = gql(/* GraphQL */ `
-  ${CORE_STOCK_FRAGS}
-  query Stocks {
-    Stocks(sort: "hebrewName") {
-      ...CoreStockFields
-    }
-  }
-`);
-
-export const GET_USER = gql(/* GraphQL */ `
-  ${CORE_USER_FRAGS}
-  ${CORE_STOCK_FRAGS}
-  query User(where: {
-    roles_contains: "kid"
-  }) {
-    User {
-      ...CoreUserFields
-      userDetails {
-        ...UserDetailsFields
-        stocks {
-          id
-          quantity
-          stock {
-            ...CoreStockFields
-          }
-        }
+export const STOCK = gql`
+  query Stock($id: String!) {
+    Stock(id: $id) {
+      id
+      hebrewName
+      symbol
+      latestPrice
+      PE
+      DPR
+      capital
+      historicPrices {
+        id
+        date
+        price
+      }
+      dividends {
+        id
+        date
+        quarter
+        dividend
+      }
+      users {
+        id
+        username
+        lastName
       }
     }
   }
-`);
+`;
 
-export const GET_ALL_USERS = gql(/* GraphQL */ `
-  ${CORE_USER_FRAGS}
-  ${CORE_STOCK_FRAGS}
-  query Users(where: {
-    roles_contains: "kid"
-  }) {
-    Users {
-      docs {
-        ...CoreUserFields
-        userDetails {
-          ...UserDetailsFields
-          stocks {
-            id
-            quantity
-            stock {
-              ...CoreStockFields
-            }
-          }
-        }
+export const STOCKS = gql`
+  query Stocks {
+    Stocks {
+      docs{
+        id
+        hebrewName
+        symbol
+        latestPrice
+        capital
       }
       totalDocs
     }
   }
-`);
+`;
+
+export const USER = gql`
+  query User($id: String!) {
+    User(id: $id) {
+      id
+      username
+      lastName
+      roles
+      email
+      accountId
+      birthday
+      portfolioValue
+      balance
+      stocks {
+        id
+        quantity
+        stock {
+          id
+          hebrewName
+          symbol
+          latestPrice
+          capital
+        }
+      }
+    }
+  }
+`;
+
+export const USERS = gql`
+  query Users {
+    Users {
+      docs {
+        id
+        username
+        lastName
+        roles
+        accountId
+        portfolioValue
+      }
+      totalDocs
+    }
+  }
+`;

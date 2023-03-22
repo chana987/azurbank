@@ -1,3 +1,5 @@
+import { Dividend, Stock, User, User_Stocks, User_Transactions } from 'utils/globalTypes';
+
 export enum ActionStatus {
   UNSUBMITTED = 'UNSUBMITTED',
   AWAITING_APPROVAL = 'AWAITING_APPROVAL',
@@ -46,39 +48,45 @@ export type RouteParams = {
   [Route.USER]: { id: string },
 }
 
-export interface Action extends Stock {
-  id: string;
-  amount?: number;
-  date?: Date;
-  status?: ActionStatus;
-  stockPrice?: number;
-  type?: ActionType;
-  value?: number;
-}
-
 export interface AuthContextState {
-  authStatus: AuthStatus,
-  getMe: () => Promise<any>,
+  authStatus?: AuthStatus,
+  getMe: () => Promise<IUser>,
   meLoading: boolean
   loginDetails: LoginDetails,
   login: () => Promise<LoginResult>,
   logout: () => void,
   updateLoginDetails: (i: Partial<LoginDetails>) => void,
-  userData: { id: string, username: string, role: string | null },
-}
-
-export interface Dividend {
-  id: string;
-  date?: Date;
-  percentage?: number;
-  sum?: number;
-  xDate?: Date;
+  userData: { id: string, username: string, roles: string[] | null },
 }
 
 export interface HistoricPrice {
   id: string;
   date?: Date;
   stockPrice?: number;
+}
+
+export interface IDividend extends Dividend {
+  id: string;
+}
+
+export interface IStock extends Stock {
+  id: string;
+}
+
+export interface ITransaction extends User_Transactions {
+  id: string;
+  value?: number;
+}
+
+export interface IUser extends User {
+  id: string;
+  stocks: IUserStock[];
+  transactions: ITransaction[];
+}
+
+export interface IUserStock extends User_Stocks {
+  id: string;
+  value?: number;
 }
 
 export interface LoginDetails {
@@ -91,55 +99,16 @@ export interface LoginResult {
   success: boolean;
 }
 
-export interface Stock {
-  id: string;
-  companyName?: string;
-  currency?: Currency;
-  currentPrice?: number;
-  dividends: Dividend[];
-  DPR?: number;
-  hebrewName?: string;
-  historicPrices: HistoricPrice[];
-  isin?: string;
-  issuerId?: number;
-  marketValue?: number;
-  PE?: number;
-  securityId?: number;
-  stockPrice?: number;
-  symbol?: string;
-}
-
 export interface StocksContextState {
   getStocks: () => void;
   loading: boolean;
-  stocks: Stock[];
-}
-
-export interface User {
-  id: string;
-  actions: Action[];
-  balance?: number;
-  birthday?: Date;
-  email?: string;
-  username?: string;
-  gender?: Gender;
-  joinDate: Date;
-  lastName?: string;
-  portfolioValue?: number;
-  role?: Role;
-  stocks: UserStock[];
-}
-
-export interface UserStock extends Stock {
-  id: string;
-  amount?: number;
-  value?: number;
+  stocks: IStock[];
 }
 
 export interface UsersContextState {
   getUser: (id: string) => void;
   getUsers: () => void;
   loading?: boolean;
-  user: User;
-  users: User[];
+  user: IUser;
+  users: IUser[];
 }

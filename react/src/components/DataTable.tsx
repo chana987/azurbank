@@ -3,7 +3,6 @@ import MaterialReactTable, {
 	MRT_ColumnDef,
 } from 'material-react-table';
 import Typography from '@mui/material/Typography';
-import DataChart from './Chart';
 import { MRT_Localization_HE } from 'utils/helpers';
 
 interface Props<T extends Record<string, any>> {
@@ -19,7 +18,7 @@ const Table = <T extends { id: string }> (props: Props<T>) => {
 	return (
 		<MaterialReactTable
 			columns={columns}
-			data={props.rows}
+			data={props.rows || []}
 			enableColumnActions={false}
 			enableColumnFilters={false}
 			enableColumnOrdering={false}
@@ -39,9 +38,6 @@ const Table = <T extends { id: string }> (props: Props<T>) => {
 				variant: 'outlined',
 			}}
 			positionGlobalFilter="right"
-			renderDetailPanel={({ row }) => (
-				props.details ? <DataChart data={row.original} detailField={props.details} /> : <Typography>אין נתונים</Typography>
-			)}
 			renderTopToolbarCustomActions={() => (
 				<Typography variant="h5">{props.title}</Typography>
 			)}

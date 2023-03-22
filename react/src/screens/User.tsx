@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import DataTable from 'components/DataTable';
 import { userActionsColumnHeaders, userStocksColumnHeaders } from 'utils/constants';
 import { UsersContext } from 'context/users';
-import { Action, UserStock } from 'utils/types';
+import { ITransaction, IUserStock } from 'utils/types';
 import Paper from '@mui/material/Paper';
 import { useParams } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
@@ -81,14 +81,14 @@ const SingleUser = () => {
 					</Grid>
 				</Grid>
 			</CardContent>
-			<DataTable<UserStock>
+			<DataTable<IUserStock>
 				rows={user?.stocks || []}
 				columns={userStocksColumnHeaders}
 				title="מניות"
 			/>
 			<Divider />
-			<DataTable<Action>
-				rows={user?.actions || []}
+			<DataTable<ITransaction>
+				rows={user?.transactions || []}
 				columns={userActionsColumnHeaders}
 				title="פעולות"
 			/>

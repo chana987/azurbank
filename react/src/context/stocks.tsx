@@ -1,18 +1,17 @@
 import { useLazyQuery } from '@apollo/client';
 import {
-	GET_ALL_STOCKS,
+	STOCKS,
 } from '../graphql/queries';
 import React, { createContext } from 'react';
 import { StocksContextState } from 'utils/types';
-import { formatStocks } from 'utils/formatters';
 
 export const StocksContext = createContext({} as StocksContextState);
 
 export const StocksProvider = ({ children }: { children: React.ReactElement; }) => {
-	const [getStocks, { data, loading }] = useLazyQuery(GET_ALL_STOCKS);
+	const [getStocks, { data, loading }] = useLazyQuery(STOCKS);
 
 	const iState = {
-		stocks: formatStocks(data?.stocks?.data) || [],
+		stocks: data?.Stocks?.docs || [],
 		getStocks,
 		loading,
 	} as StocksContextState;

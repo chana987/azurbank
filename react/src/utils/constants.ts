@@ -1,21 +1,10 @@
-import { Action, Currency, HistoricPrice, Stock, User, UserStock } from './types';
+import { IStock, ITransaction, IUser, IUserStock } from './types';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
 
-export const currencySymbols: Record<string, string> = {
-	[Currency.ILS]: '₪',
-	[Currency.USD]: '$',
-	[Currency.EUR]: '€',
-};
-
-export const stockColumnHeaders: MRT_ColumnDef<HistoricPrice>[] = [
-	{
-		header: 'תאריך',
-		accessorKey: 'date',
-		Cell: ({ cell }) => cell.getValue<string>() ? cell.getValue<Date>()?.toLocaleDateString() : '-',
-	},
+export const stockColumnHeaders: MRT_ColumnDef<IStock>[] = [
 	{
 		header: 'מחיר למנייה',
-		accessorKey: 'stockPrice',
+		accessorKey: 'latestPrice',
 		minSize: 150,
 		Cell: ({ cell }) => (
 			cell.getValue<number>()?.toLocaleString?.('en-US', {
@@ -27,7 +16,7 @@ export const stockColumnHeaders: MRT_ColumnDef<HistoricPrice>[] = [
 	},
 ];
 
-export const stocksColumnHeaders: MRT_ColumnDef<Stock>[] = [
+export const stocksColumnHeaders: MRT_ColumnDef<IStock>[] = [
 	{
 		header: 'שם החברה',
 		accessorKey: 'hebrewName',
@@ -38,14 +27,7 @@ export const stocksColumnHeaders: MRT_ColumnDef<Stock>[] = [
 	},
 	{
 		header: 'שווי שוק',
-		accessorKey: 'marketValue',
-		Cell: ({ cell }) => (
-			cell.getValue<number>()?.toLocaleString?.('en-US', {
-				style: 'currency',
-				currency: 'ILS',
-				minimumFractionDigits: 2,
-				maximumFractionDigits: 5,
-			})),
+		accessorKey: 'capital',
 	},
 	{
 		header: 'P/E',
@@ -57,7 +39,7 @@ export const stocksColumnHeaders: MRT_ColumnDef<Stock>[] = [
 	},
 	{
 		header: 'מחיר למנייה',
-		accessorKey: 'stockPrice',
+		accessorKey: 'latestPrice',
 		Cell: ({ cell }) => (
 			cell.getValue<number>()?.toLocaleString?.('en-US', {
 				style: 'currency',
@@ -68,7 +50,7 @@ export const stocksColumnHeaders: MRT_ColumnDef<Stock>[] = [
 	},
 ];
 
-export const userActionsColumnHeaders: MRT_ColumnDef<Action>[] = [
+export const userActionsColumnHeaders: MRT_ColumnDef<ITransaction>[] = [
 	{
 		header: 'סוג פעולה',
 		accessorKey: 'type',
@@ -81,15 +63,15 @@ export const userActionsColumnHeaders: MRT_ColumnDef<Action>[] = [
 	},
 	{
 		header: 'שם החברה',
-		accessorKey: 'hebrewName',
+		accessorKey: 'stock.hebrewName',
 	},
 	{
 		header: 'כמות',
-		accessorKey: 'amount',
+		accessorKey: 'quantity',
 	},
 	{
 		header: 'מחיר למנייה',
-		accessorKey: 'stockPrice',
+		accessorKey: 'stock.latestPrice',
 		maxSize: 50,
 		Cell: ({ cell }) => (
 			cell.getValue<number>()?.toLocaleString?.('en-US', {
@@ -118,10 +100,10 @@ export const userActionsColumnHeaders: MRT_ColumnDef<Action>[] = [
 	},
 ];
 
-export const usersColumnHeaders: MRT_ColumnDef<User>[] = [
+export const usersColumnHeaders: MRT_ColumnDef<IUser>[] = [
 	{
 		header: 'מספר חשבון',
-		accessorKey: 'id',
+		accessorKey: 'accountId',
 	},
 	{
 		header: 'שם העמית/ה',
@@ -137,11 +119,6 @@ export const usersColumnHeaders: MRT_ColumnDef<User>[] = [
 		Cell: ({ cell }) => cell.getValue<string>() ? new Date(cell.getValue<string>()).toLocaleDateString('he-IL') : '-',
 	},
 	{
-		header: 'תאריך הצטרפות',
-		accessorKey: 'joinDate',
-		Cell: ({ cell }) => cell.getValue<string>() ? new Date(cell.getValue<string>()).toLocaleDateString('he-IL') : '-',
-	},
-	{
 		header: 'שווי תיק',
 		accessorKey: 'portfolioValue',
 		Cell: ({ cell }) => (
@@ -154,26 +131,26 @@ export const usersColumnHeaders: MRT_ColumnDef<User>[] = [
 	},
 ];
 
-export const userStocksColumnHeaders: MRT_ColumnDef<UserStock>[] = [
+export const userStocksColumnHeaders: MRT_ColumnDef<IUserStock>[] = [
 	{
 		header: 'שם החברה',
-		accessorKey: 'hebrewName',
+		accessorKey: 'stock.hebrewName',
 	},
 	{
 		header: 'סמל',
-		accessorKey: 'symbol',
+		accessorKey: 'stock.symbol',
 	},
 	{
 		header: 'P/E',
-		accessorKey: 'PE',
+		accessorKey: 'stock.PE',
 	},
 	{
 		header: 'תשואת דיבידנדים',
-		accessorKey: 'DPR',
+		accessorKey: 'stock.DPR',
 	},
 	{
 		header: 'מחיר למנייה',
-		accessorKey: 'stockPrice',
+		accessorKey: 'stock.latestPrice',
 		Cell: ({ cell }) => (
 			cell.getValue<number>()?.toLocaleString?.('en-US', {
 				style: 'currency',
@@ -184,7 +161,7 @@ export const userStocksColumnHeaders: MRT_ColumnDef<UserStock>[] = [
 	},
 	{
 		header: 'כמות',
-		accessorKey: 'amount',
+		accessorKey: 'quantity',
 	},
 	{
 		header: 'סה"כ שווי',
