@@ -3,7 +3,6 @@ import {
 	createHttpLink,
 	InMemoryCache,
 } from '@apollo/client';
-// import { UserData } from './types';
 
 export const saveJwt = (jwt: string) => {
 	sessionStorage.setItem('token', `Bearer ${jwt}`);
