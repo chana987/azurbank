@@ -38,12 +38,11 @@
     "compile": "graphql-codegen",
     "watch": "graphql-codegen -w",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts --max_old_space_size=4096 build",
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
-    "eject": "react-scripts eject",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

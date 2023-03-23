@@ -2,10 +2,8 @@ import React, { useContext, useMemo } from 'react';
 import Chart, {
 	ArgumentAxis,
 	CommonSeriesSettings,
-	Legend,
 	Series,
 	ValueAxis,
-	ConstantLine,
 	Label,
 } from 'devextreme-react/chart';
 import Paper from '@mui/material/Paper';

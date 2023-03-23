@@ -4,7 +4,6 @@ import {
 	PaletteColorOptions,
 	PaletteColor,
 } from '@mui/material/styles';
-import { Paper } from '@mui/material';
 
 declare module '@mui/material/styles' {
   interface PaletteOptions {
@@ -61,7 +60,7 @@ export const theme = createTheme({
 	components: {
 		MuiDivider: {
 			styleOverrides: {
-				root: ({ theme }: any) => ({
+				root: ({ theme }) => ({
 					backgroundColor: theme.palette.primary.main,
 					margin: '2rem 0',
 					height: '2px',
@@ -70,7 +69,7 @@ export const theme = createTheme({
 		},
 		MuiInput: {
 			styleOverrides: {
-				root: ({ theme }: any) => ({
+				root: ({ theme }) => ({
 					color: theme.palette.grey[50],
 					'&::before': {
 						borderBottom: `1px solid ${theme.palette.grey[50]}`,
@@ -91,22 +90,15 @@ export const theme = createTheme({
 				},
 			],
 			styleOverrides: {
-				root: ({ theme }: any) => ({
+				root: {
 					elevation: 0,
 					boxShadow: 'none',
-				}),
-			},
-		},
-		MuiTable: {
-			styleOverrides: {
-				root: ({ theme }: any) => ({
-					
-				}),
+				},
 			},
 		},
 		MuiTableCell: {
 			styleOverrides: {
-				root: ({ theme }: any) => ({
+				root: ({ theme }) => ({
 					textAlign: 'start',
 					'&.MuiTableCell-head': {
 						backgroundColor: theme.palette.secondary.main,
@@ -114,15 +106,9 @@ export const theme = createTheme({
 				}),
 			},
 		},
-		MuiTableContainer: {
-			styleOverrides: {
-				root: ({ theme }: any) => ({
-				}),
-			},
-		},
 		MuiTableRow: {
 			styleOverrides: {
-				root: ({ theme }: any) => ({
+				root: ({ theme }) => ({
 					'&:not(.MuiTableRow-head)': {
 						'& > *': {
 							borderBottom: `1px solid ${theme.palette.secondary.main}`,
