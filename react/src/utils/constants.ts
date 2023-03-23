@@ -1,5 +1,6 @@
 import { IStock, ITransaction, IUser, IUserStock } from './types';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
+import Link from '@mui/material/Link';
 
 export const stockColumnHeaders: MRT_ColumnDef<IStock>[] = [
 	{
@@ -20,7 +21,7 @@ export const stocksColumnHeaders: MRT_ColumnDef<IStock>[] = [
 	{
 		header: 'שם החברה',
 		accessorKey: 'hebrewName',
-	}, 
+	},
 	{
 		header: 'סמל',
 		accessorKey: 'symbol',
@@ -104,6 +105,10 @@ export const usersColumnHeaders: MRT_ColumnDef<IUser>[] = [
 	{
 		header: 'מספר חשבון',
 		accessorKey: 'accountId',
+		Cell: ({ cell }) => {
+			return (
+				''
+			)},
 	},
 	{
 		header: 'שם העמית/ה',
@@ -113,11 +118,11 @@ export const usersColumnHeaders: MRT_ColumnDef<IUser>[] = [
 		header: 'שם משפחה',
 		accessorKey: 'lastName',
 	},
-	{
-		header: 'יום הולדת',
-		accessorKey: 'birthday',
-		Cell: ({ cell }) => cell.getValue<string>() ? new Date(cell.getValue<string>()).toLocaleDateString('he-IL') : '-',
-	},
+	// {
+	// 	header: 'יום הולדת',
+	// 	accessorKey: 'birthday',
+	// 	Cell: ({ cell }) => cell.getValue<string>() ? new Date(cell.getValue<string>()).toLocaleDateString('he-IL') : '-',
+	// },
 	{
 		header: 'שווי תיק',
 		accessorKey: 'portfolioValue',

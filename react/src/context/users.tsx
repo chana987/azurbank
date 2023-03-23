@@ -15,7 +15,7 @@ export const UsersProvider = ({ children }: { children: React.ReactElement; }) =
 
 	const iState = {
 		user: userData?.usersPermissionsUser?.docs || {},
-		users: data?.usersPermissionsUsers?.docs || [],
+		users: data?.Users?.docs || [],
 		getUser,
 		getUsers,
 		loading,
