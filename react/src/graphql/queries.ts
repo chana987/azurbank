@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import './types.ts';
 
 export const STOCK = gql`
   query Stock($id: String!) {
