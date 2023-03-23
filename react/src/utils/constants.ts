@@ -1,6 +1,5 @@
 import { IStock, ITransaction, IUser, IUserStock } from './types';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
-import Link from '@mui/material/Link';
 
 export const stockColumnHeaders: MRT_ColumnDef<IStock>[] = [
 	{
@@ -105,10 +104,6 @@ export const usersColumnHeaders: MRT_ColumnDef<IUser>[] = [
 	{
 		header: 'מספר חשבון',
 		accessorKey: 'accountId',
-		Cell: ({ cell }) => {
-			return (
-				''
-			)},
 	},
 	{
 		header: 'שם העמית/ה',
