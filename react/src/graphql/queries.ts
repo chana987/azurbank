@@ -75,9 +75,10 @@ export const USER = gql`
 
 export const USERS = gql`
   query Users {
-    Users {
+    Users(where: { roles: { in: kid } }) {
       docs {
         id
+        birthday
         username
         lastName
         roles
