@@ -26,6 +26,7 @@ const Dividends: CollectionConfig = {
       name: 'stock',
       type: 'relationship',
       relationTo: 'stocks',
+      maxDepth: 1,
       required: true,
     },
     {
