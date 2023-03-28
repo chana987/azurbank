@@ -120,6 +120,7 @@ const Users: CollectionConfig = {
               name: 'stock',
               type: 'relationship',
               relationTo: 'stocks',
+              maxDepth: 1,
               validate: (value, { siblingData }) => {
                 if (siblingData?.stocks?.find((stock) => stock.stock === value)) {
                   return 'You already have this stock';
@@ -149,6 +150,7 @@ const Users: CollectionConfig = {
                   name: 'dividend',
                   type: 'relationship',
                   relationTo: 'dividends',
+                  maxDepth: 1,
                 },
                 {
                   name: 'quantity',
@@ -236,6 +238,7 @@ const Users: CollectionConfig = {
               name: 'stock',
               type: 'relationship',
               relationTo: 'stocks',
+              maxDepth: 1,
             },
             {
               name: 'quantity',
