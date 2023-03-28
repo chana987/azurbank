@@ -115,6 +115,7 @@ const Stocks: CollectionConfig = {
       name: 'dividends',
       type: 'relationship',
       relationTo: 'dividends',
+      maxDepth: 1,
       admin: {
         readOnly: true,
       },
@@ -130,6 +131,7 @@ const Stocks: CollectionConfig = {
       name: 'users',
       type: 'relationship',
       relationTo: 'users',
+      maxDepth: 1,
       admin: {
         readOnly: true,
       },
