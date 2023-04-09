@@ -1,6 +1,27 @@
 import { IStock, ITransaction, IUser, IUserStock } from './types';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
 
+export const menuItems = [
+	{
+		name: 'מניות',
+		path: '/#',
+	},
+	{
+		name: 'חברים',
+		path: '/users',
+	},
+	{
+		name: 'מעבר לאתר ביזפורטל',
+		path: 'https://www.bizportal.co.il/',
+		target: '_blank',
+	},
+	{
+		name: 'מעבר לאתר הבורסה',
+		path: 'https://www.tase.co.il/he',
+		target: '_blank',
+	},
+];
+
 export const stockColumnHeaders: MRT_ColumnDef<IStock>[] = [
 	{
 		header: 'מחיר למנייה',

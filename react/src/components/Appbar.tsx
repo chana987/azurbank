@@ -15,10 +15,13 @@ import Avatar from '@mui/material/Avatar';
 import Input from '@mui/material/Input';
 import Grid from '@mui/material/Grid';
 import { UsersContext } from 'context/users';
+import Link from '@mui/material/Link';
+import { menuItems } from 'utils/constants';
 
 const Appbar = () => {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+	const [searchText, setSearchText] = React.useState<string>('');
 
 	const { user } = React.useContext(UsersContext);
 
@@ -37,16 +40,24 @@ const Appbar = () => {
 		setAnchorElUser(null);
 	};
 
+	const handleSearch = (event) => {
+		if (event.keyCode === 13) {
+			setSearchText('');
+		}
+	};
+
+	const handleSelectMenuItem = () => {
+		handleCloseNavMenu();
+	};
+
 	return (
 		<AppBar position="static">
 			<Container maxWidth="xl">
 				<Toolbar>
-					<AccountBalanceIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+					<AccountBalanceIcon sx={{ mr: 1 }} />
 					<Typography
 						variant="h6"
 						noWrap
-						component="a"
-						href="/"
 						sx={{
 							mr: 2,
 							display: { xs: 'none', md: 'flex' },
@@ -59,38 +70,6 @@ const Appbar = () => {
             עזורבנק
 					</Typography>
 
-					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-						<IconButton
-							size="large"
-							aria-label="account of current user"
-							aria-controls="menu-appbar"
-							aria-haspopup="true"
-							onClick={handleOpenNavMenu}
-							color="inherit"
-						>
-							<MenuIcon />
-						</IconButton>
-						<Menu
-							id="menu-appbar"
-							anchorEl={anchorElNav}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'left',
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: 'top',
-								horizontal: 'left',
-							}}
-							open={Boolean(anchorElNav)}
-							onClose={handleCloseNavMenu}
-							sx={{
-								display: { xs: 'block', md: 'none' },
-							}}
-						>
-						</Menu>
-					</Box>
-					<AccountBalanceIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
 					<Typography
 						variant="h5"
 						noWrap
@@ -100,7 +79,6 @@ const Appbar = () => {
 							mr: 2,
 							display: { xs: 'flex', md: 'none' },
 							flexGrow: 1,
-							fontFamily: 'monospace',
 							fontWeight: 700,
 							letterSpacing: '.3rem',
 							color: 'inherit',
@@ -111,7 +89,7 @@ const Appbar = () => {
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 					</Box>
-					<Box>
+					{/* <Box>
 						<Grid container>
 							<Box sx={{ paddingTop: '.5rem', paddingLeft: '.5rem' }}>
 								<SearchIcon />
@@ -119,10 +97,13 @@ const Appbar = () => {
 							<Input
 								placeholder="חיפוש..."
 								inputProps={{ 'aria-label': 'search' }}
+								value={searchText}
+								onChange={(e) => setSearchText(e.target.value)}
+								onKeyUp={(e) => handleSearch(e)}
 							/>
 						</Grid>
-					</Box>
-					<Box sx={{ flexGrow: 0, paddingRight: '.5rem' }}>
+					</Box> */}
+					{/* <Box sx={{ flexGrow: 0, paddingRight: '.5rem' }}>
 						<Tooltip title="הגדרות">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 								<Avatar alt={user?.username || 'אורח'} src="/static/images/avatar/2.jpg" />
@@ -148,6 +129,47 @@ const Appbar = () => {
 								<Typography textAlign="center">tree</Typography>
 							</MenuItem>
 						</Menu>
+					</Box> */}
+					<Box sx={{ flexGrow: 0, paddingRight: '.5rem' }}>
+						<Tooltip title="תפריט">
+							<IconButton
+								size="large"
+								aria-label="account of current user"
+								aria-controls="menu-appbar"
+								aria-haspopup="true"
+								onClick={handleOpenNavMenu}
+								color="inherit"
+							>
+								<MenuIcon />
+							</IconButton>
+						</Tooltip>
+						<Menu
+							id="menu-appbar"
+							anchorEl={anchorElNav}
+							anchorOrigin={{
+								vertical: 'bottom',
+								horizontal: 'left',
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: 'top',
+								horizontal: 'left',
+							}}
+							open={Boolean(anchorElNav)}
+							onClose={handleCloseNavMenu}
+						>
+							{menuItems.map((item, i) => 
+								<MenuItem key={i} onClick={handleSelectMenuItem}>
+									<Link
+										href={item.path}
+										underline='none'
+										width='100%'
+										target={item.target || '_self'}>
+										{item.name}
+									</Link>
+								</MenuItem>,
+							)}
+						</Menu>
 					</Box>
 				</Toolbar>
 			</Container>
@@ -156,3 +178,7 @@ const Appbar = () => {
 };
 
 export default Appbar;
+
+// TODO:
+// 1. Add search bar
+// 2. Add user menu

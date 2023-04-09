@@ -77,6 +77,9 @@ export const theme = createTheme({
 					'&:hover:not(.Mui-disabled):before': {
 						borderBottom: `2px solid ${theme.palette.grey[50]}`,
 					},
+					'&.Mui-focused:after': {
+						borderBottom: `2px solid ${theme.palette.secondary.main}`,
+					},
 				}),
 			},
 		},

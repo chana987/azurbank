@@ -19,14 +19,11 @@ const Table = <T extends { id: string }> (props: Props<T>) => {
 		<MaterialReactTable
 			columns={columns}
 			data={props.rows || []}
-			enableColumnActions={false}
-			enableColumnFilters={false}
 			enableColumnOrdering={false}
 			enableColumnResizing={false}
 			enableDensityToggle={false}
 			enableExpanding={props.details ? true : false}
 			enableHiding={false}
-			enableSorting={false}
 			icons={{
 				MoreHorizIcon: 'expand_more',
 			}}
@@ -35,7 +32,6 @@ const Table = <T extends { id: string }> (props: Props<T>) => {
 			muiSearchTextFieldProps={{
 				placeholder: 'חיפוש',
 				sx: { minWidth: '18rem' },
-				variant: 'outlined',
 			}}
 			positionGlobalFilter="right"
 			renderTopToolbarCustomActions={() => (
@@ -43,6 +39,9 @@ const Table = <T extends { id: string }> (props: Props<T>) => {
 			)}
 			renderBottomToolbarCustomActions={() => (
 				<div style={{ flex: 1 }} />
+			)}
+			renderRowActions={() => (
+				<div style={{ flex: 1, backgroundColor: 'green' }}>test</div>
 			)}
 		/>
 	);
