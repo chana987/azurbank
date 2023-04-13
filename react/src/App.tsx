@@ -8,6 +8,7 @@ import Home from 'screens/Home';
 import Users from 'screens/Users';
 import SingleUser from 'screens/User';
 import Appbar from 'components/Appbar';
+import SingleStock from 'screens/Stock';
 
 function App() {
 	const { loading } = useContext(StocksContext);
@@ -20,6 +21,7 @@ function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/users" element={<Users />} />
 					<Route path="/user/:id" element={<SingleUser />} />
+					<Route path="/stock/:id" element={<SingleStock />} />
 					<Route
 						path="*"
 						element={

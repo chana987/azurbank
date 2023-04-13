@@ -1,22 +1,32 @@
-import { IStock, ITransaction, IUser, IUserStock } from './types';
+import { Column, IStock, ITransaction, IUser, IUserStock } from './types';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { formatShekel } from './helpers';
 
-export const stockColumnHeaders: MRT_ColumnDef<IStock>[] = [
+export const menuItems = [
 	{
-		header: 'מחיר למנייה',
-		accessorKey: 'latestPrice',
-		minSize: 150,
-		Cell: ({ cell }) => (
-			cell.getValue<number>()?.toLocaleString?.('en-US', {
-				style: 'currency',
-				currency: 'ILS',
-				minimumFractionDigits: 2,
-				maximumFractionDigits: 5,
-			})),
+		name: 'מניות',
+		path: '/',
+	},
+	{
+		name: 'חברים',
+		path: '/users',
+	},
+	{
+		name: 'מעבר לאתר ביזפורטל',
+		path: 'https://www.bizportal.co.il/',
+		target: '_blank',
+		icon: OpenInNewIcon,
+	},
+	{
+		name: 'מעבר לאתר הבורסה',
+		path: 'https://www.tase.co.il/he',
+		target: '_blank',
+		icon: OpenInNewIcon,
 	},
 ];
 
-export const stocksColumnHeaders: MRT_ColumnDef<IStock>[] = [
+export const stocksColumnHeaders: Column<IStock>[] = [
 	{
 		header: 'שם החברה',
 		accessorKey: 'hebrewName',
@@ -40,13 +50,7 @@ export const stocksColumnHeaders: MRT_ColumnDef<IStock>[] = [
 	{
 		header: 'מחיר למנייה',
 		accessorKey: 'latestPrice',
-		Cell: ({ cell }) => (
-			cell.getValue<number>()?.toLocaleString?.('en-US', {
-				style: 'currency',
-				currency: 'ILS',
-				minimumFractionDigits: 2,
-				maximumFractionDigits: 5,
-			})),
+		formatValue: (value) => formatShekel(value),
 	},
 ];
 
@@ -100,7 +104,7 @@ export const userActionsColumnHeaders: MRT_ColumnDef<ITransaction>[] = [
 	},
 ];
 
-export const usersColumnHeaders: MRT_ColumnDef<IUser>[] = [
+export const usersColumnHeaders: Column<IUser>[] = [
 	{
 		header: 'מספר חשבון',
 		accessorKey: 'accountId',
@@ -121,13 +125,7 @@ export const usersColumnHeaders: MRT_ColumnDef<IUser>[] = [
 	{
 		header: 'שווי תיק',
 		accessorKey: 'portfolioValue',
-		Cell: ({ cell }) => (
-			cell.getValue<number>()?.toLocaleString?.('en-US', {
-				style: 'currency',
-				currency: 'ILS',
-				minimumFractionDigits: 2,
-				maximumFractionDigits: 5,
-			})),
+		formatValue: (value) => formatShekel(value),
 	},
 ];
 
@@ -139,14 +137,6 @@ export const userStocksColumnHeaders: MRT_ColumnDef<IUserStock>[] = [
 	{
 		header: 'סמל',
 		accessorKey: 'stock.symbol',
-	},
-	{
-		header: 'P/E',
-		accessorKey: 'stock.PE',
-	},
-	{
-		header: 'תשואת דיבידנדים',
-		accessorKey: 'stock.DPR',
 	},
 	{
 		header: 'מחיר למנייה',

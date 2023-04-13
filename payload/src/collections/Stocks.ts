@@ -15,6 +15,8 @@ const Stocks: CollectionConfig = {
   access: {
     create: isAdmin,
     read: () => true,
+    update: isAdmin,
+    delete: isAdmin,
   },
   fields: [
     {

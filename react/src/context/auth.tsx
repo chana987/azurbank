@@ -4,11 +4,12 @@ import { AuthContextState, AuthStatus, LoginDetails, LoginResult, IUser } from '
 import * as apollo from 'utils/apollo';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { USER } from 'graphql/queries';
+import { getJwt, removeJwt, saveJwt } from 'utils/localStorage';
 
 export const AuthContext = createContext({} as AuthContextState);
 
 export const AuthProvider = ({ children }: { children: React.ReactElement }) => {
-	const userJWT = apollo.getJwt();
+	const userJWT = getJwt();
 	const [getMe, { data: meData, loading: meLoading }] = useLazyQuery(USER,
 		{
 			context: {
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactElement }) => 
 				const id = response.data.login.user.id;
 				setUserData({ ...userData, id });
 
-				apollo.saveJwt(jwt);
+				saveJwt(jwt);
 				await getMe();
 
 				return { success: true, message: '' };
@@ -54,7 +55,7 @@ export const AuthProvider = ({ children }: { children: React.ReactElement }) => 
 	};
 
 	const logout = () => {
-		apollo.removeJwt();
+		removeJwt();
 		setAuthStatus(AuthStatus.SignedOut);
 	};
 

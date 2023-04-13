@@ -10,6 +10,8 @@ const Dividends: CollectionConfig = {
   access: {
     create: isAdmin,
     read: () => true,
+    update: isAdmin,
+    delete: isAdmin,
   },
   hooks: {
     beforeValidate: [

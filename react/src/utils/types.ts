@@ -43,10 +43,7 @@ export enum Route {
   USERS = 'users',
 }
 
-export type RouteParams = {
-  [Route.STOCK]: { id: string },
-  [Route.USER]: { id: string },
-}
+export type Order = 'asc' | 'desc';
 
 export interface AuthContextState {
   authStatus?: AuthStatus,
@@ -57,6 +54,13 @@ export interface AuthContextState {
   logout: () => void,
   updateLoginDetails: (i: Partial<LoginDetails>) => void,
   userData: { id: string, username: string, roles: string[] | null },
+}
+
+export interface Column<T> {
+  header: string;
+  accessorKey: keyof T;
+  formatValue?: (value: any) => string;
+  align?: 'left' | 'right' | 'center';
 }
 
 export interface HistoricPrice {
@@ -99,15 +103,23 @@ export interface LoginResult {
   success: boolean;
 }
 
+export interface RouteParams {
+  [ Route.STOCK ]: { id: string; },
+  [ Route.USER ]: { id: string; },
+}
+
 export interface StocksContextState {
+  getStock: (id: string) => void;
   getStocks: () => void;
+  handleGetStock: (id: string) => void;
   loading: boolean;
+  stock: IStock;
   stocks: IStock[];
 }
 
 export interface UsersContextState {
-  getUser: (id: string) => void;
   getUsers: () => void;
+  handleGetUser: (id: string) => void;
   loading?: boolean;
   user: IUser;
   users: IUser[];
