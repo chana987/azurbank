@@ -9,14 +9,16 @@ export const UsersContext = createContext({} as UsersContextState);
 
 export const UsersProvider = ({ children }: { children: React.ReactElement; }) => {
 	const [getUsers, { data, loading }] = useLazyQuery(USERS);
-	const [getUser, { data: userData }] = useLazyQuery(USER, {
-		variables: { id: '1' },
-	});
+	const [getUser, { data: userData }] = useLazyQuery(USER);
+
+	const handleGetUser = (id: string) => {
+		getUser({ variables: { id } });
+	};
 
 	const iState = {
-		user: userData?.usersPermissionsUser?.docs || {},
+		user: userData?.User || {},
 		users: data?.Users?.docs || [],
-		getUser,
+		handleGetUser,
 		getUsers,
 		loading,
 	} as UsersContextState;

@@ -106,6 +106,6 @@ export const convertCurrency = (value: number, from: Currency, to: Currency) => 
 	return value * 3.5;
 };
 
-export const formatShekel = (value: number) => {
-	return `₪${value.toFixed(2)}`;
+export const formatShekel = (value?: number) => {
+	return `₪${value?.toFixed(2)}`;
 };

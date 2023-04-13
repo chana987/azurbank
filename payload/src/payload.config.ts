@@ -10,7 +10,7 @@ const allowed = process.env.ALLOWED_ORIGIN?.split(",");
 
 export default buildConfig({
   serverURL: process.env.SERVER_URL,
-  cors: '*',
+  cors: allowed,
   admin: {
     user: Users.slug,
   },

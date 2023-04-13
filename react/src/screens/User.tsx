@@ -4,19 +4,21 @@ import { userActionsColumnHeaders, userStocksColumnHeaders } from 'utils/constan
 import { UsersContext } from 'context/users';
 import { ITransaction, IUserStock } from 'utils/types';
 import Paper from '@mui/material/Paper';
-import { useParams } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
-import { Divider } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import { useLocation } from 'react-router-dom';
+import { formatShekel } from 'utils/helpers';
 
 const SingleUser = () => {
-	const { id } = useParams();
-	const { user, getUser } = useContext(UsersContext);
+	const { user, handleGetUser } = useContext(UsersContext);
+	const { pathname } = useLocation();
+	const id = pathname.split('/')[2];
 
 	useEffect(() => {
 		if ((!user?.id || (user?.id !== id)) && id) {
-			getUser(id);
+			handleGetUser(id);
 		}
 	}, []);
 
@@ -60,23 +62,13 @@ const SingleUser = () => {
 							{`${user?.username} ${user?.lastName}`}
 						</Typography>
 						<Typography>
-							{user?.id}
+							{user?.accountId}
 						</Typography>
 						<Typography>
-							{user?.stocks?.map(s => s.value)?.reduce((a, b) => (a || 0) + (b || 0), 0)?.toLocaleString?.('en-US', {
-								style: 'currency',
-								currency: 'ILS',
-								minimumFractionDigits: 2,
-								maximumFractionDigits: 5,
-							})}
+							{user?.portfolioValue}
 						</Typography>
 						<Typography>
-							{user?.balance?.toLocaleString?.('en-US', {
-								style: 'currency',
-								currency: 'ILS',
-								minimumFractionDigits: 2,
-								maximumFractionDigits: 5,
-							})}
+							{formatShekel(user?.balance || 0)}
 						</Typography>
 					</Grid>
 				</Grid>

@@ -2,49 +2,49 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import SearchIcon from '@mui/icons-material/Search';
 import Tooltip from '@mui/material/Tooltip';
-import Avatar from '@mui/material/Avatar';
-import Input from '@mui/material/Input';
 import Grid from '@mui/material/Grid';
-import { UsersContext } from 'context/users';
 import Link from '@mui/material/Link';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { menuItems } from 'utils/constants';
+// import { UsersContext } from 'context/users';
+// import Avatar from '@mui/material/Avatar';
+// import Input from '@mui/material/Input';
+// import SearchIcon from '@mui/icons-material/Search';
 
 const Appbar = () => {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-	const [searchText, setSearchText] = React.useState<string>('');
+	// const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+	// const [searchText, setSearchText] = React.useState<string>('');
 
-	const { user } = React.useContext(UsersContext);
+	// const { user } = React.useContext(UsersContext);
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
-	const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-		setAnchorElUser(event.currentTarget);
-	};
+	// const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+	// 	setAnchorElUser(event.currentTarget);
+	// };
 
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
 	};
 
-	const handleCloseUserMenu = () => {
-		setAnchorElUser(null);
-	};
+	// const handleCloseUserMenu = () => {
+	// 	setAnchorElUser(null);
+	// };
 
-	const handleSearch = (event) => {
-		if (event.keyCode === 13) {
-			setSearchText('');
-		}
-	};
+	// const handleSearch = (event) => {
+	// 	if (event.keyCode === 13) {
+	// 		setSearchText('');
+	// 	}
+	// };
 
 	const handleSelectMenuItem = () => {
 		handleCloseNavMenu();
@@ -165,7 +165,11 @@ const Appbar = () => {
 										underline='none'
 										width='100%'
 										target={item.target || '_self'}>
-										{item.name}
+										<Grid container justifyContent='space-between'>
+											<Grid item>{item.name}</Grid>
+											<Grid item width="10px"></Grid>
+											<Grid item>{item.icon && <item.icon />}</Grid>
+										</Grid>
 									</Link>
 								</MenuItem>,
 							)}
@@ -182,3 +186,4 @@ export default Appbar;
 // TODO:
 // 1. Add search bar
 // 2. Add user menu
+// 3. Add user avatar

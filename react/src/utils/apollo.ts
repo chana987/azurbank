@@ -7,7 +7,7 @@ import {
 // import * as LS from './localStorage';
 
 const httpLink = createHttpLink({
-	uri: 'http://localhost:3000/api/graphql',
+	uri: process.env.GRAPHQL_API || 'http://localhost:3000/api/graphql',
 	fetchOptions: {
 		mode: 'cors',
 	},
