@@ -20,7 +20,6 @@ const Table = <T extends { id: string }> (props: Props<T>) => {
 			columns={columns}
 			data={props.rows || []}
 			enableColumnOrdering={false}
-			enableColumnResizing={false}
 			enableDensityToggle={false}
 			enableExpanding={props.details ? true : false}
 			enableHiding={false}

@@ -26,7 +26,6 @@ lib-cov
 coverage
 *.lcov
 package-lock.json
-dist
 .idea
 test-results
 
@@ -329,9 +328,6 @@ $RECYCLE.BIN/
 demo/upload
 demo/media
 demo/files
-
-# Ignore build folder
-build
 
 # Ignore built components
 payload/components/index.js

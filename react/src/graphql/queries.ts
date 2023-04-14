@@ -39,6 +39,8 @@ export const STOCKS = gql`
         symbol
         latestPrice
         capital
+        PE
+        DPR
       }
       totalDocs
     }
@@ -66,6 +68,20 @@ export const USER = gql`
           symbol
           latestPrice
           capital
+        }
+      }
+      transactions {
+        id
+        date
+        type
+        quantity
+        status
+        sum
+        price
+        stock {
+          id
+          hebrewName
+          symbol
         }
       }
     }

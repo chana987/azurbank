@@ -97,6 +97,8 @@ export const seed = async (payload: Payload): Promise<void> => {
       hebrewName: 'אדגר',
       capital: 722892000,
       symbol: 'ADGR',
+      DPR: 0.5,
+      PE: 0.5,
       historicPrices: [
         {
           date: '2023-03-09',
@@ -183,7 +185,16 @@ export const seed = async (payload: Payload): Promise<void> => {
           dividends: [],
         },
       ],
-      transactions: [],
+      transactions: [
+        {
+          date: '2023-03-09',
+          quantity: 1,
+          stock: stock2.id,
+          type: 'buy',
+          price: 2035.00,
+          sum: 2035.00,
+        },
+      ],
     },
   });
 

@@ -2,6 +2,8 @@ import { Column, IStock, ITransaction, IUser, IUserStock } from './types';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { formatShekel } from './helpers';
+import { User_Transactions_Status, User_Transactions_Type } from './globalTypes';
+import { findInDictionary } from './dictionary';
 
 export const menuItems = [
 	{
@@ -58,6 +60,7 @@ export const userActionsColumnHeaders: MRT_ColumnDef<ITransaction>[] = [
 	{
 		header: 'סוג פעולה',
 		accessorKey: 'type',
+		Cell: ({ cell }) => findInDictionary(cell.getValue<User_Transactions_Type>()),
 	},
 	{
 		header: 'תאריך',
@@ -75,7 +78,7 @@ export const userActionsColumnHeaders: MRT_ColumnDef<ITransaction>[] = [
 	},
 	{
 		header: 'מחיר למנייה',
-		accessorKey: 'stock.latestPrice',
+		accessorKey: 'price',
 		maxSize: 50,
 		Cell: ({ cell }) => (
 			cell.getValue<number>()?.toLocaleString?.('en-US', {
@@ -87,7 +90,7 @@ export const userActionsColumnHeaders: MRT_ColumnDef<ITransaction>[] = [
 	},
 	{
 		header: 'סה"כ מחיר',
-		accessorKey: 'value',
+		accessorKey: 'sum',
 		maxSize: 50,
 		Cell: ({ cell }) => (
 			cell.getValue<number>()?.toLocaleString?.('en-US', {
@@ -101,6 +104,7 @@ export const userActionsColumnHeaders: MRT_ColumnDef<ITransaction>[] = [
 		header: 'סטטוס',
 		accessorKey: 'status',
 		maxSize: 50,
+		Cell: ({ cell }) => findInDictionary(cell.getValue<User_Transactions_Status>()),
 	},
 ];
 
