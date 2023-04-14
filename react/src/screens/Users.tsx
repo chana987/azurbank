@@ -17,7 +17,7 @@ const Users = () => {
 
 	return (
 		<Paper variant="main">
-			<Typography variant="h5">משתמשים</Typography>
+			<Typography variant="h5" sx={{ textAlign: 'start', padding: '8px' }}>חברים</Typography>
 			<DataTable<IUser>
 				columns={usersColumnHeaders}
 				rows={users || []}
