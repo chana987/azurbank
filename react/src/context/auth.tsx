@@ -1,7 +1,7 @@
 import { LOGIN } from 'graphql/mutations';
 import React, { createContext, useState } from 'react';
 import { AuthContextState, AuthStatus, LoginDetails, LoginResult, IUser } from 'utils/types';
-import * as apollo from 'utils/apollo';
+import client from 'utils/apollo';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { USER } from 'graphql/queries';
 import { getJwt, removeJwt, saveJwt } from 'utils/localStorage';
