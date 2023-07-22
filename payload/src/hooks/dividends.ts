@@ -2,24 +2,22 @@ import { CollectionAfterChangeHook, CollectionBeforeChangeHook } from 'payload/t
 import payload from 'payload';
 
 export const addDividendToStock: CollectionAfterChangeHook = async ({ operation, doc, req }) => {
-  if (operation === 'create' || operation === 'update') {
-    const stockId = doc.stock.id;
-    if (!stockId) return doc;
+  const stockId = doc.stock.id;
+  if (!stockId) return doc;
 
-    const stock = await payload.findByID({
-      collection: 'stocks',
-      id: stockId,
-    });
-    if (!stock) return doc;
+  const stock = await payload.findByID({
+    collection: 'stocks',
+    id: stockId,
+  });
+  if (!stock) return doc;
 
-    await payload.update({
-      collection: 'stocks',
-      id: stockId,
-      data: {
-        dividends: [...stock.dividends, doc.id],
-      }
-    });
-  }
+  await payload.update({
+    collection: 'stocks',
+    id: stockId,
+    data: {
+      dividends: [ ...stock.dividends, doc.id ],
+    }
+  });
 };
 
 export const getDividendName: CollectionBeforeChangeHook = async ({ operation, data }) => {

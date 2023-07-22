@@ -75,7 +75,7 @@ const Stocks: CollectionConfig = {
           name: 'latestPrice',
           type: 'number',
           admin: {
-            readOnly: true,
+            // readOnly: true,
           },
         }
       ],
@@ -119,7 +119,7 @@ const Stocks: CollectionConfig = {
       relationTo: 'dividends',
       maxDepth: 1,
       admin: {
-        readOnly: true,
+        // readOnly: true,
       },
       hasMany: true,
       defaultValue: () => [],
@@ -135,7 +135,7 @@ const Stocks: CollectionConfig = {
       relationTo: 'users',
       maxDepth: 1,
       admin: {
-        readOnly: true,
+        // readOnly: true,
       },
       hasMany: true,
       defaultValue: () => [],

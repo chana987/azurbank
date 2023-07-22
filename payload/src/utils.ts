@@ -22,6 +22,14 @@ export const calculatePortfolioValue = async (user: any) => {
   return portfolioValue;
 };
 
+export const calculateBalance = async (user: any) => {
+  let balance = user.balance;
+  //adjust balance for each transaction or dividend
+  
+  return balance;
+}
+    
+
 export const isKid = (siblingData) => {
   return siblingData?.roles?.includes('kid');
 }

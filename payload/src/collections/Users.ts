@@ -1,6 +1,6 @@
 import { CollectionConfig } from 'payload/types';
 import { isAdmin } from '../access';
-import { addUserToStock, updateUserPortfolioValue } from '../hooks/users';
+import { updateStockUsers, updateUserBalance, updateUserPortfolioValue } from '../hooks/users';
 import { isKid } from '../utils';
 
 const Users: CollectionConfig = {
@@ -10,11 +10,6 @@ const Users: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'username',
-  },
-  hooks: {
-    afterChange: [
-      addUserToStock,
-    ],
   },
   access: {
     create: isAdmin,
@@ -88,7 +83,7 @@ const Users: CollectionConfig = {
           type: 'number',
           admin:
           {
-            readOnly: true,
+            // readOnly: true,
           },
         },
         {
@@ -112,6 +107,9 @@ const Users: CollectionConfig = {
       hooks: {
         beforeChange: [
           updateUserPortfolioValue,
+        ],
+        afterRead: [
+          updateStockUsers,
         ],
       },
       fields: [
@@ -142,22 +140,26 @@ const Users: CollectionConfig = {
           defaultValue: [],
           admin: {
             initCollapsed: true,
-            readOnly: true,
+            // readOnly: true,
           },
           fields: [
+            {
+              name: 'dividend',
+              type: 'relationship',
+              relationTo: 'dividends',
+              maxDepth: 1,
+            },
             {
               type: 'row',
               fields: [
                 {
-                  name: 'dividend',
-                  type: 'relationship',
-                  relationTo: 'dividends',
-                  maxDepth: 1,
-                },
-                {
                   name: 'quantity',
                   type: 'number',
                 },
+                {
+                  name: 'tax',
+                  type: 'number',
+                }
               ],
             },
           ],
@@ -171,6 +173,11 @@ const Users: CollectionConfig = {
       admin: {
         initCollapsed: true,
         condition: (siblingData) => isKid(siblingData),
+      },
+      hooks: {
+        beforeChange: [
+          updateUserBalance,
+        ],
       },
       fields: [
         {
@@ -226,6 +233,10 @@ const Users: CollectionConfig = {
               required: true,
             },
             {
+              name: 'fee',
+              type: 'number',
+            },
+            {
               name: 'date',
               type: 'date',
               required: true,
@@ -249,7 +260,11 @@ const Users: CollectionConfig = {
             {
               name: 'price',
               type: 'number',
-            }
+            },
+            {
+              name: 'tax',
+              type: 'number',
+            },
           ],
           admin: {
             condition: (data, siblingData) => siblingData.type === 'buy' || siblingData.type === 'sell',
